@@ -174,6 +174,11 @@ class myFOSSIL_Resources
                 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin,
                 'enqueue_scripts' );
+
+        /* Advanced Custom Fields (ACF) */
+		$this->loader->add_filter( 'acf/settings/path', $plugin_admin, 'acf_settings_path' );
+		$this->loader->add_filter( 'acf/settings/dir', $plugin_admin, 'acf_settings_dir' );
+		$this->loader->add_filter( 'acf/settings/show_admin', $plugin_admin, 'acf_show_admin' );
     }
 
     /**
