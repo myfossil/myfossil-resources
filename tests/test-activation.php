@@ -41,6 +41,7 @@ class PluginActivationComponentsTest extends Tests\myFOSSIL_Resources_Test
 
         // Test that we actually have something...
         $data = array(
+                'country' => "US",
                 'state' => "California",
                 'type' => "Museum",
                 'city' => "Los Angeles",

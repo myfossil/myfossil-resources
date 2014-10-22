@@ -584,6 +584,7 @@ class myFOSSIL_Resources_Admin
                 return -1;
     
             // Load in ACF data for the Place
+            update_field( 'country', 'US', $post_id );
             foreach ( $acf_fields as $field_name )
                 update_field( $field_name, $data[ $field_name ], $post_id );
         }

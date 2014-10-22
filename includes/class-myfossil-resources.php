@@ -181,8 +181,8 @@ class myFOSSIL_Resources
         $this->loader->add_action( 'init', $plugin_admin, 'create_events' );
 
         /* Advanced Custom Fields (ACF) */
-        $this->loader->add_action( 'init', $plugin_admin, 'create_places_acf' );
-        $this->loader->add_action( 'init', $plugin_admin, 'create_events_acf' );
+        $this->loader->add_action( 'init', $plugin_admin, 'create_places_acf', 20 );
+        $this->loader->add_action( 'init', $plugin_admin, 'create_events_acf', 20 );
 		$this->loader->add_filter( 'acf/settings/path', $plugin_admin, 'acf_settings_path' );
 		$this->loader->add_filter( 'acf/settings/dir', $plugin_admin, 'acf_settings_dir' );
 		$this->loader->add_filter( 'acf/settings/show_admin', $plugin_admin, 'acf_show_admin' );
@@ -209,7 +209,6 @@ class myFOSSIL_Resources
                 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public,
                 'enqueue_scripts' );
-
     }
 
     /**
