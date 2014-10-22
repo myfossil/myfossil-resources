@@ -63,6 +63,13 @@ register_deactivation_hook( __FILE__, array(
 require_once( plugin_dir_path( __FILE__ ) .
         'includes/class-myfossil-resources.php' );
 
+/**
+ * Hide Advanced Custom Fields
+ *
+ * @see {@link http://www.advancedcustomfields.com/resources/including-acf-in-a-plugin-theme/}
+ */
+define( 'ACF_LITE' , true );
+
 
 /**
  * Begins execution of the plugin.
