@@ -14,9 +14,9 @@ class PluginActivationComponentsTest extends Tests\myFOSSIL_Resources_Test
      * Test that Place custom post type (CPT) created with ACF.
      */
     public function testCptPlaceWithAcf() {
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::create_places() );
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::create_places_acf() );
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::acf_compatible( 'place' ) );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::create_places() );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::create_places_acf() );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::acf_compatible( 'place' ) );
         $this->assertNotFalse( post_type_exists( 'place' ) );
     }
 
@@ -24,9 +24,9 @@ class PluginActivationComponentsTest extends Tests\myFOSSIL_Resources_Test
      * Test that Event custom post type (CPT) created with ACF.
      */
     public function testCptEventWithAcf() {
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::create_events() );
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::create_events_acf() );
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::acf_compatible( 'event' ) );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::create_events() );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::create_events_acf() );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::acf_compatible( 'event' ) );
         $this->assertNotFalse( post_type_exists( 'event' ) );
     }
 
@@ -36,8 +36,8 @@ class PluginActivationComponentsTest extends Tests\myFOSSIL_Resources_Test
      * @depends testCptPlaceWithAcf
      */
     public function testLoadPlacesFromCsv() {
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::acf_compatible( 'place' ) );
-        $this->assertNotFalse( myFOSSIL_Resources_Activator::load_data_places() );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::acf_compatible( 'place' ) );
+        $this->assertNotFalse( myFOSSIL_Resources_Admin::load_data_places() );
 
         // Test that we actually have something...
         $data = array(

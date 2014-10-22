@@ -75,7 +75,6 @@ class myFOSSIL_Resources
 
         $this->load_dependencies();
         $this->set_locale();
-        $this->define_activator_hooks();
         $this->define_admin_hooks();
         $this->define_public_hooks();
 
@@ -175,28 +174,16 @@ class myFOSSIL_Resources
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin,
                 'enqueue_scripts' );
 
+        /* Custom Post Types */
+        $this->loader->add_action( 'init', $plugin_admin, 'create_places' );
+        $this->loader->add_action( 'init', $plugin_admin, 'create_events' );
+
         /* Advanced Custom Fields (ACF) */
+        $this->loader->add_action( 'init', $plugin_admin, 'create_places_acf' );
+        $this->loader->add_action( 'init', $plugin_admin, 'create_events_acf' );
 		$this->loader->add_filter( 'acf/settings/path', $plugin_admin, 'acf_settings_path' );
 		$this->loader->add_filter( 'acf/settings/dir', $plugin_admin, 'acf_settings_dir' );
 		$this->loader->add_filter( 'acf/settings/show_admin', $plugin_admin, 'acf_show_admin' );
-    }
-
-    /**
-     * Register all of the hooks related to the CPT functionality of the
-     * plugin.
-     *
-     * @since    0.0.1
-     * @access   private
-     */
-    private function define_activator_hooks()
-    {
-        $plugin_activator = new myFOSSIL_Resources_Activator;
-        
-        // Create CPT's Place and Events
-        $this->loader->add_action( 'init', $plugin_activator, 'create_places' );
-        $this->loader->add_action( 'init', $plugin_activator, 'create_events' );
-        $this->loader->add_action( 'init', $plugin_activator, 'create_places_acf' );
-        $this->loader->add_action( 'init', $plugin_activator, 'create_events_acf' );
     }
 
     /**
