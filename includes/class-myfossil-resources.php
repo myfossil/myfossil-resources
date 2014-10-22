@@ -174,6 +174,8 @@ class myFOSSIL_Resources
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin,
                 'enqueue_scripts' );
 
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menus' );
+
         /* Custom Post Types */
         $this->loader->add_action( 'init', $plugin_admin, 'create_places' );
         $this->loader->add_action( 'init', $plugin_admin, 'create_events' );
@@ -184,6 +186,10 @@ class myFOSSIL_Resources
 		$this->loader->add_filter( 'acf/settings/path', $plugin_admin, 'acf_settings_path' );
 		$this->loader->add_filter( 'acf/settings/dir', $plugin_admin, 'acf_settings_dir' );
 		$this->loader->add_filter( 'acf/settings/show_admin', $plugin_admin, 'acf_show_admin' );
+
+        /* AJAX */
+        $this->loader->add_action( 'wp_ajax_myfr_load_data', $plugin_admin,
+                'ajax_handler' );
     }
 
     /**

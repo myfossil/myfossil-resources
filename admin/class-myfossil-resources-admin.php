@@ -11,6 +11,8 @@ namespace myFOSSIL\Plugin\Resources;
  * @subpackage myFOSSIL_Resources/admin
  */
 
+require_once 'partials/myfossil-resources-admin-display.php';
+
 /**
  * The dashboard-specific functionality of the plugin.
  *
@@ -52,12 +54,20 @@ class myFOSSIL_Resources_Admin
      */
     public function __construct( $plugin_name, $version )
     {
-
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-
     }
 
+    public function register_menus() {
+        /**
+         * myFOSSIL Logging administrator settings page.
+         */
+        add_options_page('myFOSSIL Resources', 'myFOSSIL Resources',
+                'administrator', 'myfossil-resources',
+                'myFOSSIL\Plugin\Resources\admin_settings_page' );
+    }
+
+    // {{{ ACF configuration methods
     /**
      * Configure path to Advanced Custom Fields in the plugin.
      *
@@ -86,6 +96,30 @@ class myFOSSIL_Resources_Admin
         return false;
     }
 
+    /**
+     * Returns whether ACF is currently supported for the given CPT.
+     *
+     * @author  Brandon Wood <btwood@geometeor.com>
+     * @since   0.0.1
+     * @static
+     * @param   string  $post_type (optional) Post type.
+     * @return  bool    True if ACF is ready to be used, false if not.
+     */
+    public static function acf_compatible( $post_type=null )
+    {
+        // Check whether we can even add custom fields
+        if ( !function_exists( 'register_field_group' ) )
+            false;
+
+        // Check whether the CPT exists, if provided
+        if ( $post_type && !post_type_exists( $post_type ) )
+            return false;
+
+        return true;
+    }
+    // }}}
+
+    // {{{ Places configuration methods
     /**
      * Create the custom post type Place.
      *
@@ -127,6 +161,7 @@ class myFOSSIL_Resources_Admin
             'show_ui'            => true,
             'show_in_menu'       => true,
             'query_var'          => true,
+            'menu_icon'          => 'dashicons-location-alt',
             'rewrite'            => array( 'slug' => 'place' ),
             'capability_type'    => 'post',
             'has_archive'        => true,
@@ -138,82 +173,6 @@ class myFOSSIL_Resources_Admin
 
         // Tell WordPress.
         return register_post_type( 'place', $args );
-    }
-
-    /**
-     * Create the custom post type Event.
-     *
-     * This function also calls the function to create the Advanced Custom
-     * Fields (ACF) for the Event post type.
-     *
-     * @author  Joseph Furlott <jmfurlott@geometeor.com>
-     * @author  Brandon Wood <btwood@geometeor.com>
-     * @since   0.0.1
-     * @static
-     * @param   bool    $acf (optional) Whether to create ACF for post type, default true.
-     * @return  bool    True upon success, false upon failure.
-     */
-    public static function create_events()
-    {
-        // {{{ Events, labels
-        $labels = array(
-            'name'               => __( 'Events', 'fossil' ),
-            'singular_name'      => __( 'Event', 'fossil' ),
-            'menu_name'          => __( 'Events', 'fossil' ),
-            'name_admin_bar'     => __( 'Event', 'fossil' ),
-            'add_new'            => __( 'Add New', 'fossil' ),
-            'add_new_item'       => __( 'Add New Event', 'fossil' ),
-            'new_item'           => __( 'New Event', 'fossil' ),
-            'edit_item'          => __( 'Edit Event', 'fossil' ),
-            'view_item'          => __( 'View Event', 'fossil' ),
-            'all_items'          => __( 'All Events', 'fossil' ),
-            'search_items'       => __( 'Search Events', 'fossil' ),
-            'parent_item_colon'  => __( 'Parent Events:', 'fossil' ),
-            'not_found'          => __( 'No Events found.', 'fossil' ),
-            'not_found_in_trash' => __( 'No Events found in Trash.', 'fossil' )
-        );
-        // }}}
-        // {{{ Events, arguments
-        $args = array(
-            'labels'             => $labels,
-            'public'             => true,
-            'publicly_queryable' => true,
-            'show_ui'            => true,
-            'show_in_menu'       => true,
-            'query_var'          => true,
-            'rewrite'            => array( 'slug' => 'event' ),
-            'capability_type'    => 'post',
-            'has_archive'        => true,
-            'hierarchical'       => false,
-            'menu_position'      => null,
-            'supports'           => array( 'title', 'editor', 'author', 'thumbnail',  'comments' )
-        );
-        // }}}
-
-        // Tell WordPress.
-        return register_post_type( 'event', $args );
-    }
-
-    /**
-     * Returns whether ACF is currently supported for the given CPT.
-     *
-     * @author  Brandon Wood <btwood@geometeor.com>
-     * @since   0.0.1
-     * @static
-     * @param   string  $post_type (optional) Post type.
-     * @return  bool    True if ACF is ready to be used, false if not.
-     */
-    public static function acf_compatible( $post_type=null )
-    {
-        // Check whether we can even add custom fields
-        if ( !function_exists( 'register_field_group' ) )
-            false;
-
-        // Check whether the CPT exists, if provided
-        if ( $post_type && !post_type_exists( $post_type ) )
-            return false;
-
-        return true;
     }
 
     /**
@@ -397,6 +356,64 @@ class myFOSSIL_Resources_Admin
         return true;
     }
 
+    // }}}
+
+    // {{{ Events configuration methods
+    /**
+     * Create the custom post type Event.
+     *
+     * This function also calls the function to create the Advanced Custom
+     * Fields (ACF) for the Event post type.
+     *
+     * @author  Joseph Furlott <jmfurlott@geometeor.com>
+     * @author  Brandon Wood <btwood@geometeor.com>
+     * @since   0.0.1
+     * @static
+     * @param   bool    $acf (optional) Whether to create ACF for post type, default true.
+     * @return  bool    True upon success, false upon failure.
+     */
+    public static function create_events()
+    {
+        // {{{ Events, labels
+        $labels = array(
+            'name'               => __( 'Events', 'fossil' ),
+            'singular_name'      => __( 'Event', 'fossil' ),
+            'menu_name'          => __( 'Events', 'fossil' ),
+            'name_admin_bar'     => __( 'Event', 'fossil' ),
+            'add_new'            => __( 'Add New', 'fossil' ),
+            'add_new_item'       => __( 'Add New Event', 'fossil' ),
+            'new_item'           => __( 'New Event', 'fossil' ),
+            'edit_item'          => __( 'Edit Event', 'fossil' ),
+            'view_item'          => __( 'View Event', 'fossil' ),
+            'all_items'          => __( 'All Events', 'fossil' ),
+            'search_items'       => __( 'Search Events', 'fossil' ),
+            'parent_item_colon'  => __( 'Parent Events:', 'fossil' ),
+            'not_found'          => __( 'No Events found.', 'fossil' ),
+            'not_found_in_trash' => __( 'No Events found in Trash.', 'fossil' )
+        );
+        // }}}
+        // {{{ Events, arguments
+        $args = array(
+            'labels'             => $labels,
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'menu_icon'          => 'dashicons-calendar',
+            'rewrite'            => array( 'slug' => 'event' ),
+            'capability_type'    => 'post',
+            'has_archive'        => true,
+            'hierarchical'       => false,
+            'menu_position'      => null,
+            'supports'           => array( 'title', 'editor', 'author', 'thumbnail',  'comments' )
+        );
+        // }}}
+
+        // Tell WordPress.
+        return register_post_type( 'event', $args );
+    }
+
     /**
      * Add custom fields to the Event custom post type.
      *
@@ -494,7 +511,20 @@ class myFOSSIL_Resources_Admin
 
         return true;
     }
+    // }}}
 
+
+    /**
+     * ajax callback for admin panel ajax
+     */
+    public function ajax_handler() {
+        if ( $_POST[ 'action'] == 'myfr_load_data' ) {
+            echo (int) self::load_data_places();
+        }
+        die();
+    }
+
+    // {{{ Load data method
     /**
      * Load in data from CSV into Places.
      *
@@ -508,10 +538,6 @@ class myFOSSIL_Resources_Admin
      */
     public static function load_data_places( $filename=null, $field_map=null )
     {
-        // Exit if we can't do this yet.
-        if ( !self::acf_compatible( 'place' ) )
-            return false;
-
         // Set default filename
         if ( !$filename )
             $filename = plugin_dir_path( dirname( __FILE__ ) ) .
@@ -519,7 +545,7 @@ class myFOSSIL_Resources_Admin
 
         // Exit if the file doesn't exist.
         if ( !file_exists( $filename ) )
-            return false;
+            return -2;
 
         // Define the default field_map for the CSV, order *is* important.
         if ( !$field_map )
@@ -555,16 +581,18 @@ class myFOSSIL_Resources_Admin
 
             // Check that it actually went in
             if ( !$post_id )
-                return false;
+                return -1;
     
             // Load in ACF data for the Place
             foreach ( $acf_fields as $field_name )
                 update_field( $field_name, $data[ $field_name ], $post_id );
         }
 
-        return true;
+        return 1;
     }
+    // }}}
 
+    // {{{ WordPress, enqueues
     /**
      * Register the stylesheets for the Dashboard.
      *
@@ -588,6 +616,9 @@ class myFOSSIL_Resources_Admin
                 'css/myfossil-resources-admin.css', array(), $this->version,
                 'all' );
 
+        wp_enqueue_style( 'fontawesome',
+                "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+                array(), $this->version, 'all' );
     }
 
     /**
@@ -612,7 +643,7 @@ class myFOSSIL_Resources_Admin
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
                 'js/myfossil-resources-admin.js', array( 'jquery' ),
                 $this->version, false );
-
     }
+    // }}}
 
 }
