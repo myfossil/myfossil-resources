@@ -209,6 +209,13 @@ class myFOSSIL_Resources
                 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public,
                 'enqueue_scripts' );
+
+        $this->loader->add_action( 'wp_ajax_myfr_list_states', $plugin_public,
+                'ajax_handler' );
+        $this->loader->add_action( 'wp_ajax_myfr_list_types', $plugin_public,
+                'ajax_handler' );
+        $this->loader->add_action( 'wp_ajax_myfr_list_places', $plugin_public,
+                'ajax_handler' );
     }
 
     /**

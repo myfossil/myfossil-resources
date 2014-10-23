@@ -64,7 +64,7 @@ class myFOSSIL_Resources_Admin
          */
         add_options_page('myFOSSIL Resources', 'myFOSSIL Resources',
                 'administrator', 'myfossil-resources',
-                'myFOSSIL\Plugin\Resources\admin_settings_page' );
+                'myFOSSIL\Plugin\Resources\Admin\admin_settings_page' );
     }
 
     // {{{ ACF configuration methods
