@@ -168,28 +168,21 @@ class myFOSSIL_Resources_Public
      */
     public function enqueue_scripts()
     {
-
-        /**
-         * This function is provided for demonstration purposes only.
-         *
-         * An instance of this class should be passed to the run() function
-         * defined in myFOSSIL_Resources_Public_Loader as all of the hooks are
-         * defined in that particular class.
-         *
-         * The myFOSSIL_Resources_Public_Loader will then create the
-         * relationship between the defined hooks and the functions defined in
-         * this class.
-         */
         wp_enqueue_script( 'es5-shim',
                 '//cdnjs.cloudflare.com/ajax/libs/es5-shim/4.0.3/es5-shim.js',
                 array( 'jquery' ), $this->version, false );
+
         wp_enqueue_script( 'handlebars',
                 '//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js',
                 array( 'jquery' ), $this->version, false );
+
+        wp_enqueue_script( 'googlemaps',
+                '//maps.googleapis.com/maps/api/js?sensor=false',
+                array( 'jquery' ), $this->version, false );
+
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
                 'js/myfossil-resources-public.js', array( 'jquery' ),
                 $this->version, false );
-
     }
     // }}}
 }
