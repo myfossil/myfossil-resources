@@ -92,6 +92,13 @@ class myFOSSIL_Resources_Public
                 )
             );
 
+        $events = get_posts( 
+                array( 
+                    'post_type' => 'event', 
+                    'posts_per_page' => -1 
+                )
+            );
+
         switch ( $_POST['action'] ) {
             case 'myfr_list_states':
                 $states = array();
@@ -127,6 +134,20 @@ class myFOSSIL_Resources_Public
                 }
 
                 echo json_encode( array( 'places' => $pl_array ) );
+
+                die;
+                break;
+
+            case 'myfr_list_events':
+                $ev_array = array();
+                foreach ( $events as $ev ) {
+                    $fields = parse_meta( get_post_meta( $ev->ID ) );
+                    $fields[ 'title' ] = $ev->post_title;
+                    $fields[ 'content' ] = $ev->post_content;
+                    array_push( $ev_array, $fields );
+                }
+
+                echo json_encode( array( 'events' => $ev_array ) );
 
                 die;
                 break;
