@@ -218,7 +218,10 @@ class myFOSSIL_Resources
                 'ajax_handler' );
         $this->loader->add_action( 'wp_ajax_myfr_list_events', $plugin_public,
                 'ajax_handler' );
-
+        $this->loader->add_action( 'wp_ajax_myfr_filter_start_date', $plugin_public,
+                'ajax_handler' );
+$this->loader->add_action( 'wp_ajax_myfr_filter_end_date', $plugin_public,
+                'ajax_handler' );
 	// Public
         $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_states', $plugin_public,
                 'ajax_handler' );
@@ -226,8 +229,12 @@ class myFOSSIL_Resources
                 'ajax_handler' );
         $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_places', $plugin_public,
                 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_events', $plugin_public,
+        $this->loader->add_action( 'wp_ajax_nopriv_start_date', $plugin_public,
                 'ajax_handler' );
+        $this->loader->add_action( 'wp_ajax_nopriv_myfr_filter_start_date', $plugin_public,
+                'ajax_handler' );
+    
+$this->loader->add_action( 'wp_ajax_nopriv_myfr_filter_end_date', $plugin_public,                'ajax_handler' );
     }
 
     /**
