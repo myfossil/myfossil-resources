@@ -153,9 +153,10 @@ class myFOSSIL_Resources_Public
                 break;
 
             case 'myfr_filter_start_date':
+                
                 $start_date = $_POST['start_date'];
                 $start_date = date_create_from_format("m/d/Y",$start_date); 
-                 
+                $end_date = date_create_from_format("m/d/Y",$_POST['end_date']);
                  $ev_array = array();
 
                 foreach ( $events as $ev ) {
@@ -163,8 +164,16 @@ class myFOSSIL_Resources_Public
                     $fields[ 'title' ] = $ev->post_title;
                     $fields[ 'content' ] = $ev->post_content;
                     $ev_start_date = date_create_from_format("mdY", $fields['starts_at']);
-                    if($start_date <= $ev_start_date) 
-                        array_push( $ev_array, $fields );
+                    $ev_end_date = date_create_from_format("mdY", $fields['ends_at']);
+                    if(empty($end_date)) {
+                        if($start_date <= $ev_start_date) {
+                            array_push( $ev_array, $fields );
+                        }
+                    } else { //means we have an end_date provider
+                        if($start_date <= $ev_start_date && $end_date >= $ev_end_date) {
+                            array_push( $ev_array, $fields );
+                        }
+                    }
                 }
 
                 echo json_encode( array( 'events' => $ev_array ) );
@@ -174,9 +183,11 @@ class myFOSSIL_Resources_Public
 
             case 'myfr_filter_end_date':
                 $end_date = $_POST['end_date'];
-                $end_date = date_create_from_format("m/d/Y",$end_date); 
-                $today = new \DateTime('now');
-                 
+                $end_date = date_create_from_format("m/d/Y",$end_date);
+                $start_date = new \DateTime('now');
+                if(!empty($_POST['start_date'])) { 
+                    $start_date = date_create_from_format("m/d/Y",$_POST['start_date']);
+                }
                  $ev_array = array();
 
                 foreach ( $events as $ev ) {
@@ -185,9 +196,8 @@ class myFOSSIL_Resources_Public
                     $fields[ 'content' ] = $ev->post_content;
                     $ev_end_date = date_create_from_format("mdY", $fields['ends_at']);
                     $ev_start_date = date_create_from_format("mdY", $fields['starts_at']);
-                    $fields['today'] = $today;
                     
-                    if($today <= $ev_start_date && $end_date >= $ev_end_date) 
+                    if($start_date <= $ev_start_date && $end_date >= $ev_end_date) 
                         array_push( $ev_array, $fields );
                 }
 
