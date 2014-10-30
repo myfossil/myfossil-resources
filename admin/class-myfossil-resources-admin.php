@@ -488,6 +488,12 @@ class myFOSSIL_Resources_Admin
                         'display_format' => 'mm/dd/yy',
                         'first_day' => 1,
                     ),
+                    array  (
+                        'key' => 'field_acf_myfr_event_org',
+                        'label' => 'Organization',
+                        'name' => 'organization',
+                        'type' => 'text',
+                    ),
                 ),
                 'location' => array (
                     array (
