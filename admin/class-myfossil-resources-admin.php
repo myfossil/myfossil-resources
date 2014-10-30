@@ -454,7 +454,7 @@ class myFOSSIL_Resources_Admin
                         'label' => 'Place',
                         'name' => 'place',
                         'type' => 'relationship',
-                        'return_format' => 'object',
+                        'return_format' => 'id',
                         'post_type' => array (
                             0 => 'place',
                         ),

@@ -128,6 +128,7 @@ class myFOSSIL_Resources_Public
                 $pl_array = array();
                 foreach ( $places as $pl ) {
                     $fields = parse_meta( get_post_meta( $pl->ID ) );
+                    
                     $fields[ 'title' ] = $pl->post_title;
                     $fields[ 'content' ] = $pl->post_content;
                     array_push( $pl_array, $fields );
@@ -144,6 +145,13 @@ class myFOSSIL_Resources_Public
                     $fields = parse_meta( get_post_meta( $ev->ID ) );
                     $fields[ 'title' ] = $ev->post_title;
                     $fields[ 'content' ] = $ev->post_content;
+
+                    //TODO: need to get the places object here.
+                    $place = get_post_meta($ev->ID, 'place');
+                    $fields['place'] = array();
+                    $place_id = $place[0][0]; //only should ever be one
+                    array_push($fields['place'], parse_meta( get_post_meta($place_id)));
+                    
                     array_push( $ev_array, $fields );
                 }
 
