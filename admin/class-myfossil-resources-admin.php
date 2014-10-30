@@ -205,6 +205,7 @@ class myFOSSIL_Resources_Admin
                             'National Park' => 'National Park',
                             'Collecting Site' => 'Collecting Site',
                             'Museum' => 'Museum',
+                            'Event Venue' => 'Event Venue',
                             'Other' => 'Other',
                         ),
                         'default_value' => '',
