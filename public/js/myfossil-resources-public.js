@@ -42,6 +42,9 @@
             },
             dataType: 'json',
             success: function( data ) {
+                console.log( '-- begin events --' );
+                console.log( data );
+                console.log( '-- end events --' );
                 json = data;
             },
             error: function ( err ) {
@@ -232,6 +235,37 @@
                     if ( state !== 'United States' )
                         tpl += tpl_state.replace( /%state%/, state );
                     tpl += tpl_types.replace( /%type%/, type );
+                    $( tpl ).show();
+                }
+            );
+    }
+    // }}}
+    
+    // {{{ filter_events
+    function filter_events() {
+        var tpl,
+            tpl_state = '[data-event-state="%state%"]',
+            tpl_types = '[data-event-type="%type%"]',
+            tpl_dates = '[data-event-date="%date%"]',
+            state = $( '#state' ).val(),
+            dt = $( '#month-year' ).val();
+
+        // Reset, hide all.
+        $( 'div.panel' ).hide();
+
+        // Filter by type and state where ( type && state ).
+        $( 'input:checkbox:checked' )
+            .map( function() { return this.value; } )
+            .get()
+            .forEach(
+                function( type ) { 
+                    tpl = 'div';
+                    if ( state !== 'United States' )
+                        tpl += tpl_state.replace( /%state%/, state );
+                    if ( dt !== 'All time' )
+                        tpl += tpl_dates.replace( /%date%/, dt );
+                    tpl += tpl_types.replace( /%type%/, type );
+                    console.log( tpl );
                     $( tpl ).show();
                 }
             );
@@ -439,11 +473,11 @@
 
         var map = new google.maps.Map( document.getElementById("map-canvas"), mapOptions );
 	
-	var prevInfoWindow;
+        var prevInfoWindow;
+
         // Add a marker for each place on the map.
         events.forEach(
             function( event ) {
-		console.log(event);
                 // Create an info pop-up window for the marker.
                 var info = new google.maps.InfoWindow(
                         { content: event.content }
@@ -504,6 +538,9 @@
             init_events_filters_state();
             init_events_filters_type();
             init_events_filters_month_year();
+            $( '#state' ).change( filter_events );
+            $( '#month-year' ).change( filter_events );
+            $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_events );
 
             // Load up Google map with markers.
             google.maps.event.addDomListener(window, 'load', init_events_map);

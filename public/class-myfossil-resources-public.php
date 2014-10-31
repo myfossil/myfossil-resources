@@ -204,15 +204,27 @@ class myFOSSIL_Resources_Public
                 $ev_array = array();
                 foreach ( $events as $ev ) {
                     $fields = parse_meta( get_post_meta( $ev->ID ) );
-                    $fields[ 'title' ] = $ev->post_title;
-                    $fields[ 'content' ] = $ev->post_content;
-
-                    //TODO: need to get the places object here.
-                    $place = get_post_meta($ev->ID, 'place');
-                    $fields['place'] = array();
-                    $place_id = $place[0][0]; //only should ever be one
-                    array_push($fields['place'], parse_meta( get_post_meta($place_id)));
                     
+                    // Skip if the event does not have a start date/time defined
+                    if ( ! array_key_exists( 'starts_at', $fields ) )
+                        continue;
+
+                    $fields['title'] = $ev->post_title;
+                    $fields['content'] = $ev->post_content;
+
+                    // Get datetime
+                    $dt = date_parse( $fields['starts_at'] );
+                    $fields['month_year'] = sprintf( "%04d-%02d", $dt['year'], $dt['month'] );
+
+                    // Get place
+                    // @todo cleanup, get object
+                    $place = get_post_meta($ev->ID, 'place');
+                    $place_id = $place[0][0]; //only should ever be one
+                    $place_meta = parse_meta( get_post_meta( $place_id ) );
+                    if ( array_key_exists( 'state', $place_meta ) )
+                        $fields['state'] = $place_meta['state'];
+                    $fields['place'] = array( $place_meta );
+
                     array_push( $ev_array, $fields );
                 }
 
