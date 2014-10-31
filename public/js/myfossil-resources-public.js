@@ -51,91 +51,93 @@
 
         return json;
     } 
-    // {{{ init_places
-    function init_places() {
-	var tpl_src = $( '#tpl-places' ).html();
-	var tpl = Handlebars.compile( tpl_src );
-	$( '#places-list' ).html( tpl( get_places() ) );
-    }
     // }}}
 
+    // {{{ init_places
+    function init_places() {
+        var tpl_src = $( '#tpl-places' ).html();
+        var tpl = Handlebars.compile( tpl_src );
+        $( '#places-list' ).html( tpl( get_places() ) );
+    }
+    // }}}
 
     // {{{ init_events
     function init_events() {
         var tpl_src = $( '#tpl-events' ).html();
         var nonce = $( '#myfr_filter_nonce' ).val(); 
         var tpl = Handlebars.compile( tpl_src );
+
+        // Populate Events list
         $( '#events-list' ).html( tpl( get_events() ) );
-		
-	$( '#start-date-picker' ).datepicker({
-	    onSelect: function() {
-		console.log('onSelect: ' + $('#start-date-picker').val());
-		//$('div.panel').hide();
-		var json;
-		$.ajax({ 
-		    type: 'post',
-		    url: ajaxurl,
-		    data: { 
-			'action': 'myfr_filter_start_date',
-			'nonce': nonce,
-			'start_date': $('#start-date-picker').val(),
-			'end_date': $('#end-date-picker').val()
-		    },
-		    dataType: 'json',
-		    success: function(response) {
-			console.log(response);
-			$('#events-list').html(tpl(response));
-		    },
-		    failure: function(response) {
-			console.log('failure');
-			console.log(response);
-		    },
-		    error: function(jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR);
-			console.log(textStatus);
-			console.log(errorThrown);
-		    }
-		});
-	    }
-	});
-    
-	$( '#end-date-picker' ).datepicker({
-	    onSelect: function() {
-		console.log('onSelect: ' + $('#end-date-picker').val());
-		//$('div.panel').hide();
-		var json;
-		$.ajax({ 
-		    type: 'post',
-		    url: ajaxurl,
-		    data: { 
-			'action': 'myfr_filter_end_date',
-			'nonce': nonce,
-			'start_date': $('#start-date-picker').val(),
-			'end_date': $('#end-date-picker').val()
-		    },
-		    dataType: 'json',
-		    success: function(response) {
-			console.log(response);
-			$('#events-list').html(tpl(response));
-		    },
-		    failure: function(response) {
-			console.log('failure');
-			console.log(response);
-		    },
-		    error: function(jqXHR, textStatus, errorThrown) {
-			console.log(jqXHR);
-			console.log(textStatus);
-			console.log(errorThrown);
-		    }
-		});
-	    }
-	});
-    
+
+        // {{{ Start date picker
+        $( '#start-date-picker' ).datepicker({
+            onSelect: function() {
+                var json;
+
+                $.ajax({ 
+                    type: 'post',
+                    url: ajaxurl,
+                    data: { 
+                            'action': 'myfr_filter_start_date',
+                            'nonce': nonce,
+                            'start_date': $('#start-date-picker').val(),
+                            'end_date': $('#end-date-picker').val()
+                        },
+                    dataType: 'json',
+                    success: function(response) {
+                            console.log(response);
+                            $('#events-list').html(tpl(response));
+                        },
+                    failure: function(response) {
+                            console.log('failure');
+                            console.log(response);
+                        },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                        }
+                });
+            }
+        });
+        // }}}
+
+        // {{{ End date picker
+        $( '#end-date-picker' ).datepicker({
+            onSelect: function() {
+                var json;
+
+                $.ajax({ 
+                    type: 'post',
+                    url: ajaxurl,
+                    data: { 
+                        'action': 'myfr_filter_end_date',
+                        'nonce': nonce,
+                        'start_date': $('#start-date-picker').val(),
+                        'end_date': $('#end-date-picker').val()
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                            console.log(response);
+                            $('#events-list').html(tpl(response));
+                        },
+                    failure: function(response) {
+                            console.log('failure');
+                            console.log(response);
+                        },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(jqXHR);
+                            console.log(textStatus);
+                            console.log(errorThrown);
+                        }
+                });
+            }
+        });
+        // }}}
 
     }
     // }}}
-
-
 
     // {{{ init_filters_state
     function init_filters_state() {
@@ -302,7 +304,6 @@
     }
     // }}}
 
-
     // {{{ init_events_map
     function init_events_map() {
         var events = get_events().events;
@@ -386,9 +387,8 @@
         if ( !! $( '#events-list' ).length ) {
             init_events();
 
-	    google.maps.event.addDomListener(window, 'load', init_events_map);
-
-	   
+            // Load up Google map with markers.
+            google.maps.event.addDomListener(window, 'load', init_events_map);
         }
 
     } );
