@@ -139,8 +139,8 @@
     }
     // }}}
 
-    // {{{ init_filters_state
-    function init_filters_state() {
+    // {{{ init_places_filters_state
+    function init_places_filters_state() {
         var tpl;
         var nonce = $( '#myfr_filter_nonce' ).val(); 
 
@@ -175,8 +175,8 @@
     }
     // }}}
 
-    // {{{ init_filters_type
-    function init_filters_type() {
+    // {{{ init_places_filters_type
+    function init_places_filters_type() {
         var tpl;
         var nonce = $( '#myfr_filter_nonce' ).val(); 
 
@@ -212,8 +212,8 @@
     }
     // }}}
 
-    // {{{ filter 
-    function filter() {
+    // {{{ filter_places
+    function filter_places() {
         var tpl,
             tpl_state = '[data-place-state="%state%"]',
             tpl_types = '[data-place-type="%type%"]',
@@ -238,8 +238,8 @@
     }
     // }}}
 
-// {{{ init_map
-    function init_map() {
+    // {{{ init_places_map
+    function init_places_map() {
         var places = get_places().places;
 
         var icon_url = "http://maps.google.com/mapfiles/ms/icons/";
@@ -375,13 +375,13 @@
             init_places();
             
             // Setup filters and listeners.
-            init_filters_state();
-            init_filters_type();
-            $( '#state' ).change( filter );
-            $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter );
+            init_places_filters_state();
+            init_places_filters_type();
+            $( '#state' ).change( filter_places );
+            $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_places );
 
             // Load up Google map with markers.
-            google.maps.event.addDomListener( window, 'load', init_map );
+            google.maps.event.addDomListener( window, 'load', init_places_map );
         }
 
         if ( !! $( '#events-list' ).length ) {
