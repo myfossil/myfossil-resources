@@ -65,6 +65,13 @@ class myFOSSIL_Resources_Public
         return ksort( $array );
     }
 
+    public static function month_name( $month ) {
+        $months = array( 'January', 'February', 'March', 'April', 'May',
+                'June', 'July', 'August', 'September', 'October', 'November',
+                'December' );
+        return $months[( $month - 1 )];
+    }
+
     // {{{ AJAX for grabbing stuff
     /**
      * ajax call handler
@@ -148,12 +155,19 @@ class myFOSSIL_Resources_Public
                 break;
 
             case 'myfr_list_events_month_years':
-                $types = array();
-                foreach ( $events as $ev )
-                    print_r( parse_meta( get_post_meta( $ev->ID ) ) );
-                asort( $types );
+                $month_years = array();
+                foreach ( $events as $ev ) {
+                    $meta = parse_meta( get_post_meta( $ev->ID ) );
+                    if ( ! array_key_exists( 'starts_at', $meta ) )
+                        continue;
+                    $dt = date_parse( $meta['starts_at'] );
+                    $key = sprintf( "%04d-%02d", $dt['year'], $dt['month'] );
+                    $value = sprintf( "%s, %04d", self::month_name( $dt['month'] ), $dt['year'] );
 
-                echo json_encode( array_values( array_unique( $types ) ) );
+                    $month_years[$key] = $value;
+                }
+                ksort( $month_years );
+                echo json_encode( $month_years );
 
                 die;
                 break;

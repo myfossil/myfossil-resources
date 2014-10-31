@@ -291,12 +291,16 @@
                 'nonce': nonce,
             },
             dataType: 'json',
-            success: function( states ) {
-                $( '#month-year' ).append( '<option>United States</option>' );
-                states.forEach( function( state ) {
-                    tpl = '<option value="' + state + '">' + state + '</option>';
-                    $( '#month-year' ).append( tpl );
-                });
+            success: function( resp ) {
+                $( '#month-year' ).append( '<option>All time</option>' );
+                console.log( resp );
+
+                for ( var key in resp ) {
+                    if ( resp.hasOwnProperty( key ) ) {
+                        tpl = '<option value="' + key + '">' + resp[key] + '</option>';
+                        $( '#month-year' ).append( tpl );
+                    }
+                }
                 $( '#month-year' ).prop( 'disabled', false );
                 $( '#loading-dates' ).remove();
             },
@@ -499,7 +503,7 @@
             // Setup filters and listeners.
             init_events_filters_state();
             init_events_filters_type();
-            //init_events_filters_month_year();
+            init_events_filters_month_year();
 
             // Load up Google map with markers.
             google.maps.event.addDomListener(window, 'load', init_events_map);
