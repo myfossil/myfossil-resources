@@ -238,6 +238,115 @@
     }
     // }}}
 
+    // {{{ init_events_filters_state
+    function init_events_filters_state() {
+        var tpl;
+        var nonce = $( '#myfr_filter_nonce' ).val(); 
+
+        // toggle loading
+        $( '#state' ).prop( 'disabled', true );
+        $( '#state' ).append( '<option id="loading-states">Loading...</option>' ); 
+
+        $.ajax({
+            type: 'post',
+            url: ajaxurl,
+            data: { 
+                'action': 'myfr_list_events_states',
+                'nonce': nonce,
+            },
+            dataType: 'json',
+            success: function( states ) {
+                $( '#state' ).append( '<option>United States</option>' );
+                states.forEach( function( state ) {
+                    tpl = '<option value="' + state + '">' + state + '</option>';
+                    $( '#state' ).append( tpl );
+                });
+                $( '#state' ).prop( 'disabled', false );
+                $( '#loading-states' ).remove();
+            },
+            error: function( err ) {
+                console.log( err );
+                $( '#loading-states' ).text( 'Error' );
+            }
+        });
+
+        return 1;
+    }
+    // }}}
+
+    // {{{ init_events_filters_month_year
+    function init_events_filters_month_year() {
+        var tpl;
+        var nonce = $( '#myfr_filter_nonce' ).val(); 
+
+        // toggle loading
+        $( '#month-year' ).prop( 'disabled', true );
+        $( '#month-year' ).append( '<option id="loading-dates">Loading...</option>' ); 
+
+        $.ajax({
+            type: 'post',
+            url: ajaxurl,
+            data: { 
+                'action': 'myfr_list_events_month_years',
+                'nonce': nonce,
+            },
+            dataType: 'json',
+            success: function( states ) {
+                $( '#month-year' ).append( '<option>United States</option>' );
+                states.forEach( function( state ) {
+                    tpl = '<option value="' + state + '">' + state + '</option>';
+                    $( '#month-year' ).append( tpl );
+                });
+                $( '#month-year' ).prop( 'disabled', false );
+                $( '#loading-dates' ).remove();
+            },
+            error: function( err ) {
+                console.log( err );
+                $( '#loading-dates' ).text( 'Error' );
+            }
+        });
+
+        return 1;
+    }
+    // }}}
+
+    // {{{ init_events_filters_type
+    function init_events_filters_type() {
+        var tpl;
+        var nonce = $( '#myfr_filter_nonce' ).val(); 
+
+        // toggle loading
+        $( '#types-selected' ).append( 
+                '<div id="loading-types"><i class="fa fa-fw fa-spinner fa-spin"></i> Loading...</div>' );
+
+        $.ajax({
+            type: 'post',
+            url: ajaxurl,
+            data: { 
+                'action': 'myfr_list_events_types',
+                'nonce': nonce,
+            },
+            dataType: 'json',
+            success: function( types ) {
+                types.forEach( function( type ) {
+                    tpl = '<div class="checkbox"><label>';
+                    tpl += '<input type="checkbox" value="' + type + '" checked="checked">';
+                    tpl += type + '</label></div>';
+                    $( '#types-selected' ).append( tpl );
+                });
+
+                $( '#loading-types' ).remove();
+            },
+            error: function( err ) {
+                console.log( err );
+                $( '#loading-types' ).text( '<i class="fa fa-fw fa-warning"></i> Error' );
+            }
+        });
+
+        return 1;
+    }
+    // }}}
+
     // {{{ init_places_map
     function init_places_map() {
         var places = get_places().places;
@@ -386,6 +495,11 @@
 
         if ( !! $( '#events-list' ).length ) {
             init_events();
+
+            // Setup filters and listeners.
+            init_events_filters_state();
+            init_events_filters_type();
+            //init_events_filters_month_year();
 
             // Load up Google map with markers.
             google.maps.event.addDomListener(window, 'load', init_events_map);

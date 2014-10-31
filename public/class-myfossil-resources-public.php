@@ -112,6 +112,53 @@ class myFOSSIL_Resources_Public
                 break;
 
 
+            case 'myfr_list_events_states':
+                $states = array();
+                foreach ( $events as $ev ) {
+                    $meta = parse_meta( get_post_meta( $ev->ID ) );
+                    if ( ! array_key_exists( 'place', $meta ) )
+                        continue;
+
+                    // Get Place data
+                    $place = get_post_meta( $ev->ID, 'place' );
+                    $place_id = $place[0][0]; //only should ever be one
+                    $place_meta = parse_meta( get_post_meta( $place_id ) );
+                    if ( ! array_key_exists( 'state', $place_meta ) )
+                        continue;
+
+                    $states[] = $place_meta['state'];
+                }
+                asort( $states );
+
+                echo json_encode( array_values( array_unique( $states ) ) );
+                die;
+
+                break;
+
+
+            case 'myfr_list_events_types':
+                $types = array();
+                foreach ( $events as $ev )
+                    $types[] = parse_meta( get_post_meta( $ev->ID ) )[ 'type' ];
+                asort( $types );
+
+                echo json_encode( array_values( array_unique( $types ) ) );
+
+                die;
+                break;
+
+            case 'myfr_list_events_month_years':
+                $types = array();
+                foreach ( $events as $ev )
+                    print_r( parse_meta( get_post_meta( $ev->ID ) ) );
+                asort( $types );
+
+                echo json_encode( array_values( array_unique( $types ) ) );
+
+                die;
+                break;
+
+
             case 'myfr_list_types':
                 $types = array();
                 foreach ( $places as $pl )
@@ -161,11 +208,10 @@ class myFOSSIL_Resources_Public
                 break;
 
             case 'myfr_filter_start_date':
-                
                 $start_date = $_POST['start_date'];
                 $start_date = date_create_from_format("m/d/Y",$start_date); 
                 $end_date = date_create_from_format("m/d/Y",$_POST['end_date']);
-                 $ev_array = array();
+                $ev_array = array();
 
                 foreach ( $events as $ev ) {
                     $fields = parse_meta( get_post_meta( $ev->ID ) );
