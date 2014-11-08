@@ -60,7 +60,7 @@
     function init_places() {
         var tpl_src = $( '#tpl-places' ).html();
         var tpl = Handlebars.compile( tpl_src );
-        $( '#places-list' ).html( tpl( get_places() ) );
+        //$( '#places-list' ).html( tpl( get_places() ) );
     }
     // }}}
 

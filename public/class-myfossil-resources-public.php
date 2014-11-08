@@ -193,6 +193,7 @@ class myFOSSIL_Resources_Public
                     $fields[ 'title' ] = $pl->post_title;
                     $fields[ 'content' ] = $pl->post_content;
                     array_push( $pl_array, $fields );
+                    
                 }
 
                 echo json_encode( array( 'places' => $pl_array ) );
