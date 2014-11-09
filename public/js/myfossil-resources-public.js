@@ -148,8 +148,8 @@
         var nonce = $( '#myfr_filter_nonce' ).val(); 
 
         // toggle loading
-        $( '#state' ).prop( 'disabled', true );
-        $( '#state' ).append( '<option id="loading-states">Loading...</option>' ); 
+        $( '#state-filter' ).prop( 'disabled', true );
+        $( '#state-filter' ).append( '<option id="loading-states">Loading...</option>' ); 
 
         $.ajax({
             type: 'post',
@@ -160,18 +160,23 @@
             },
             dataType: 'json',
             success: function( states ) {
-                $( '#state' ).append( '<option>United States</option>' );
+		console.log(states);
+		console.log($('#state'));
+                $( '#state-filter' ).append( '<option>United States</option>' );
                 states.forEach( function( state ) {
                     tpl = '<option value="' + state + '">' + state + '</option>';
-                    $( '#state' ).append( tpl );
+                    $( '#state-filter' ).append( tpl );
                 });
-                $( '#state' ).prop( 'disabled', false );
+                $( '#state-filter' ).prop( 'disabled', false );
                 $( '#loading-states' ).remove();
             },
             error: function( err ) {
                 console.log( err );
                 $( '#loading-states' ).text( 'Error' );
-            }
+            },
+	    failure: function(err) {
+		console.log('failure');
+	    }
         });
 
         return 1;
@@ -220,7 +225,7 @@
         var tpl,
             tpl_state = '[data-place-state="%state%"]',
             tpl_types = '[data-place-type="%type%"]',
-            state = $( '#state' ).val();
+            state = $( '#state-filter' ).val();
 
         // Reset, hide all.
         $( 'div.panel' ).hide();
@@ -572,7 +577,7 @@
      function clear_place_filters() {
 	$('#clear-filters').click(function() {
 	    console.log('clear');
-	    $('#state').val('United States');
+	    $('#state-filter').val($('#state-filter option:first').val());
 	    var $checkboxes = $('#types-selected').find('input');
 	    $checkboxes.each(function() {
 		$(this).prop('checked', true);
@@ -602,7 +607,7 @@
             // Setup filters and listeners.
             init_places_filters_state();
             //init_places_filters_type();  // the extra function call for issue #8
-            $( '#state' ).change( filter_places );
+            $( '#state-filter' ).change( filter_places );
             $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_places );
 
             // Load up Google map with markers.
