@@ -568,7 +568,17 @@
 	
     }
 
-
+    // Clear filters button
+    function clear_place_filters() {
+	$('#clear-filters').click(function() {
+	    console.log('clear');
+	    $('#state').val('United States');
+	    var $checkboxes = $('#types-selected').find('input');
+	    $checkboxes.each(function() {
+		$(this).prop('checked', true);
+	    });
+	});
+    }
 
     $( function() {
 
@@ -586,6 +596,9 @@
 
 	    // Load form submission
 	    create_place_submit();
+
+	    // Listeners
+	    clear_place_filters();
 	}
 
         if ( !! $( '#events-list' ).length ) {
