@@ -569,7 +569,7 @@
     }
 
     // Clear filters button
-    function clear_place_filters() {
+     function clear_place_filters() {
 	$('#clear-filters').click(function() {
 	    console.log('clear');
 	    $('#state').val('United States');
@@ -577,6 +577,20 @@
 	    $checkboxes.each(function() {
 		$(this).prop('checked', true);
 	    });
+	    filter_places();
+	});
+    }
+
+   function clear_event_filters() {
+	$('#clear-filters').click(function() {
+	    console.log('clear');
+	    $('#state').val($('#state option:first').val());
+	    $('#month-year').val($('#month-year option:first').val());
+	    var $checkboxes = $('#types-selected').find('input');
+	    $checkboxes.each(function() {
+		$(this).prop('checked', true);
+	    });
+	    filter_events();
 	});
     }
 
@@ -614,7 +628,10 @@
 
             // Load up Google map with markers.
             google.maps.event.addDomListener(window, 'load', init_events_map);
-        }
+       
+	    // Listeners
+	    clear_event_filters();
+	}
 
     } );
 
