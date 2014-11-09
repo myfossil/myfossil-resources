@@ -286,6 +286,31 @@ class myFOSSIL_Resources_Public
 
                 die;
                 break;
+
+            case 'myfr_create_place':
+                $data = $_POST['data'];
+                $post_data = array(
+                    'post_type'  => 'place',
+                    'post_title' => $data['name'],
+                    'post_content' => $data['description']
+                );
+                
+                $id = wp_insert_post($post_data);
+                add_metadata( 'post', $id, 'county', $data['county'] );
+                add_metadata('post', $id, 'country', $data['country'] );
+                add_metadata('post', $id, 'state', $data['state'] );
+                add_metadata('post', $id, 'city', $data['city']);
+                add_metadata('post', $id, 'zip', $data['zip']);
+                add_metadata('post', $id, 'address', $data['address']);
+                add_metadata('post', $id, 'latitude', $data['latitude']);
+                add_metadata('post', $id, 'longitude', $data['longitude']);
+                add_metadata('post', $id, 'latitude', $data['latitude']);
+                add_metadata('post', $id, 'url', $data['url']);
+                add_metadata('post', $id, 'map_url', $data['map_url']);
+                add_metadata('post', $id, 'type', $data['type']);
+                echo json_encode($id);
+                die;
+                break;
         }
     }
     // }}}
@@ -339,6 +364,8 @@ class myFOSSIL_Resources_Public
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
                 'js/myfossil-resources-public.js', array( 'jquery' ),
                 $this->version, false );
+
+        
     }
     // }}}
 }

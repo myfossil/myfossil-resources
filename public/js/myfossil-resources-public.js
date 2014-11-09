@@ -60,7 +60,7 @@
     function init_places() {
         var tpl_src = $( '#tpl-places' ).html();
         var tpl = Handlebars.compile( tpl_src );
-        //$( '#places-list' ).html( tpl( get_places() ) );
+        $( '#places-list' ).html( tpl( get_places() ) );
     }
     // }}}
 
@@ -516,6 +516,60 @@
     }
     // }}}
 
+    // Create place form submission
+    function create_place_submit() {
+        var nonce = $( '#myfr_filter_nonce' ).val(); 
+	$('#new-place-form').submit(function(event) {
+	    event.preventDefault();
+	    event.stopPropagation();
+
+	    // Get all the data
+	    var data = {
+		"name" : $('#new-place-form').find('#name').val(),
+		"description" : $('#new-place-form').find('#description').val(),
+		"type" : $('#new-place-form').find('#type').val(),
+		"country" : $('#new-place-form').find('#country').val(),
+		"state" : $('#new-place-form').find('#state').val(),
+		"county" : $('#new-place-form').find('#county').val(),
+		"city" : $('#new-place-form').find('#city').val(),
+		"zip" : $('#new-place-form').find('#zip').val(),
+		"address" : $('#new-place-form').find('#address').val(),
+		"latitude" : $('#new-place-form').find('#latitude').val(),
+		"longitude" : $('#new-place-form').find('#longitude').val(),
+		"url" : $('#new-place-form').find('#url').val(),
+		"map_url" : $('#new-place-form').find('#map_url').val(),
+	    }
+
+	    console.log(data);
+	    // Perform the ajax call 
+	    $.ajax({
+                type: 'post',
+		url: ajaxurl,
+		data: { 
+		    'action': 'myfr_create_place',
+		    'nonce': nonce,
+		    'data': data
+		},
+		dataType: 'json',
+		success: function( response ) {
+		    console.log(response);
+		},
+		failure: function() {
+		    console.log('fail');
+		}, 
+		error: function() {
+		    console.log('error');
+		}
+	    });
+
+	    // Return successful
+	    console.log('submitted');
+	});
+	
+    }
+
+
+
     $( function() {
 
         if ( !! $( '#places-list' ).length ) {
@@ -523,13 +577,16 @@
             
             // Setup filters and listeners.
             init_places_filters_state();
-            init_places_filters_type();
+            //init_places_filters_type();  // the extra function call for issue #8
             $( '#state' ).change( filter_places );
             $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_places );
 
             // Load up Google map with markers.
             google.maps.event.addDomListener( window, 'load', init_places_map );
-        }
+
+	    // Load form submission
+	    create_place_submit();
+	}
 
         if ( !! $( '#events-list' ).length ) {
             init_events();
@@ -547,5 +604,7 @@
         }
 
     } );
+
+
 
 }( jQuery ) );

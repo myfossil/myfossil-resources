@@ -228,6 +228,8 @@ class myFOSSIL_Resources
                 $plugin_public, 'ajax_handler' );
         $this->loader->add_action( 'wp_ajax_myfr_list_events_month_years',
                 $plugin_public, 'ajax_handler' );
+        $this->loader->add_action( 'wp_ajax_myfr_create_place',
+                $plugin_public, 'ajax_handler' );
 
         // Public
         $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_states',
@@ -245,6 +247,8 @@ class myFOSSIL_Resources
         $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_events_states',
                 $plugin_public, 'ajax_handler' );
         $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_events_types',
+                $plugin_public, 'ajax_handler' );
+        $this->loader->add_action( 'wp_ajax_nopriv_myfr_create_place',
                 $plugin_public, 'ajax_handler' );
         $this->loader->add_action(
                 'wp_ajax_nopriv_myfr_list_events_month_years', $plugin_public,
