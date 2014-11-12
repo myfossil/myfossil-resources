@@ -33,8 +33,8 @@
     // {{{ init_events
     function init_events() {
         var tpl_src = $( '#tpl-events' ).html();
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
         var tpl = Handlebars.compile( tpl_src );
+        var nonce = $( '#myfr_filter_nonce' ).val(); 
 
         // Populate Events list
         $( '#events-list' ).html( tpl( get_events() ) );
@@ -337,24 +337,27 @@
     // }}}
 
     $( function() {
-        // Initialize Events
-        init_events();
+        if ( !! $( '#events-list' ).length ) {
+            console.info( 'We think there are Events' );
+            // Initialize Events
+            init_events();
 
-        // Setup filters
-        init_events_filters_state();
-        init_events_filters_type();
-        init_events_filters_month_year();
+            // Setup filters
+            init_events_filters_state();
+            init_events_filters_type();
+            init_events_filters_month_year();
 
-        // Setup listeners
-        $( '#state' ).change( filter_events );
-        $( '#month-year' ).change( filter_events );
-        $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_events );
+            // Setup listeners
+            $( '#state' ).change( filter_events );
+            $( '#month-year' ).change( filter_events );
+            $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_events );
 
-        // Load up Google Map with markers
-        google.maps.event.addDomListener(window, 'load', init_events_map);
-   
-        // Reset filters
-        clear_event_filters();
+            // Load up Google Map with markers
+            google.maps.event.addDomListener(window, 'load', init_events_map);
+       
+            // Reset filters
+            clear_event_filters();
+        }
     } );
 
 }( jQuery ) );

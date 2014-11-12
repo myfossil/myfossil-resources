@@ -63,6 +63,26 @@ register_deactivation_hook( __FILE__, array(
 require_once( plugin_dir_path( __FILE__ ) .
         'includes/class-myfossil-resources.php' );
 
+function myfossil_enqueue_scripts() {
+    wp_enqueue_script( 'myfossil-resources-public-docs', 
+            plugin_dir_url( __FILE__ ) .  'static/js/public-docs.min.js',
+            array( 'jquery' ) );
+    wp_enqueue_script( 'myfossil-resources-public-events', 
+            plugin_dir_url( __FILE__ ) .  'static/js/public-events.min.js',
+            array( 'jquery' ) );
+    wp_enqueue_script( 'myfossil-resources-public-places', 
+            plugin_dir_url( __FILE__ ) .  'static/js/public-places.min.js',
+            array( 'jquery' ) );
+}
+add_action( 'wp_enqueue_scripts', __namespace__ . '\myfossil_enqueue_scripts' );
+
+function myfossil_admin_enqueue_scripts() {
+    wp_enqueue_script( 'myfossil-resources-admin', 
+            plugin_dir_url( __FILE__ ) .  'static/js/admin.min.js',
+            array( 'jquery' ) );
+}
+add_action( 'admin_enqueue_scripts', __namespace__ . '\myfossil_admin_enqueue_scripts' );
+
 /**
  * Hide Advanced Custom Fields
  *

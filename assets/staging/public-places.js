@@ -264,24 +264,26 @@
     // }}}
 
     $( function() {
-        // Initialize Places
-        init_places();
-        
-        // Setup filters and listeners
-        init_places_filters_state();
+        if ( !! $( '#places-list' ).length ) {
+            // Initialize Places
+            init_places();
+            
+            // Setup filters and listeners
+            init_places_filters_state();
 
-        //init_places_filters_type();  // the extra function call for issue #8
-        $( '#state-filter' ).change( filter_places );
-        $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_places );
+            //init_places_filters_type();  // the extra function call for issue #8
+            $( '#state-filter' ).change( filter_places );
+            $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_places );
 
-        // Load Google Map with markers
-        google.maps.event.addDomListener( window, 'load', init_places_map );
+            // Load Google Map with markers
+            google.maps.event.addDomListener( window, 'load', init_places_map );
 
-        // Initialize Place creation form behavior
-        create_place_submit();
+            // Initialize Place creation form behavior
+            create_place_submit();
 
-        // Initialize Place filters
-        clear_place_filters();
+            // Initialize Place filters
+            clear_place_filters();
+        }
     } );
 
 }( jQuery ) );

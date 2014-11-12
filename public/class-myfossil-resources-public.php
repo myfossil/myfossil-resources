@@ -360,16 +360,6 @@ class myFOSSIL_Resources_Public
         wp_enqueue_script( 'googlemaps',
                 '//maps.googleapis.com/maps/api/js?sensor=false',
                 array( 'jquery' ), $this->version, false );
-
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
-                'js/places.js', array( 'jquery' ),
-                $this->version, false );
-
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
-                'js/events.js', array( 'jquery' ),
-                $this->version, false );
-
-        
     }
     // }}}
 }
