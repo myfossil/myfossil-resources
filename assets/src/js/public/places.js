@@ -220,7 +220,8 @@
                     'state', 'county', 'city', 'zip', 'address', 'latitude',
                     'longitude', 'url', 'map_url' ];
             $.map( data_keys, function( key ) {
-                data[key] = $( this ).find( '#' + key ).val();
+                data[key] = $( 'input#' + key ).val();
+                if ( key === 'type' ) data[key] = $( 'select#type' ).val();
             });
 
             // Perform the ajax call 
@@ -235,7 +236,8 @@
                 dataType: 'json',
                 success: function( response ) {
                     // Added successfully, hide modal
-                    $( this ).modal( 'hide' );
+                    $( '#placesModal' ).modal( 'hide' );
+                    location.reload();
                 },
                 error: function( err ) {
                     console.info( data );
