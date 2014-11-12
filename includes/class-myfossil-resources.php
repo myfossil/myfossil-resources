@@ -99,12 +99,6 @@ class myFOSSIL_Resources
     private function load_dependencies()
     {
         /**
-         *  Advanced Custom Fields.
-         */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) .
-            'includes/acf/acf.php';
-
-        /**
          * The class responsible for orchestrating the actions and filters of
          * the core plugin.
          */
@@ -179,13 +173,6 @@ class myFOSSIL_Resources
         /* Custom Post Types */
         $this->loader->add_action( 'init', $plugin_admin, 'create_places' );
         $this->loader->add_action( 'init', $plugin_admin, 'create_events' );
-
-        /* Advanced Custom Fields (ACF) */
-        $this->loader->add_action( 'init', $plugin_admin, 'create_places_acf', 20 );
-        $this->loader->add_action( 'init', $plugin_admin, 'create_events_acf', 20 );
-		$this->loader->add_filter( 'acf/settings/path', $plugin_admin, 'acf_settings_path' );
-		$this->loader->add_filter( 'acf/settings/dir', $plugin_admin, 'acf_settings_dir' );
-		$this->loader->add_filter( 'acf/settings/show_admin', $plugin_admin, 'acf_show_admin' );
 
         /* AJAX */
         $this->loader->add_action( 'wp_ajax_myfr_load_data', $plugin_admin,
