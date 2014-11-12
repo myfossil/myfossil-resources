@@ -1,6 +1,9 @@
 <?php
 namespace myFOSSIL\Plugin\Resources;
 
+require_once( 'partials/places.php' );
+require_once( 'partials/events.php' );
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -292,22 +295,23 @@ class myFOSSIL_Resources_Public
                 $post_data = array(
                     'post_type'  => 'place',
                     'post_title' => $data['name'],
-                    'post_content' => $data['description']
+                    'post_content' => $data['description'],
+                    'post_status' => 'publish'
                 );
                 
                 $id = wp_insert_post($post_data);
-                add_metadata( 'post', $id, 'county', $data['county'] );
-                add_metadata('post', $id, 'country', $data['country'] );
-                add_metadata('post', $id, 'state', $data['state'] );
-                add_metadata('post', $id, 'city', $data['city']);
-                add_metadata('post', $id, 'zip', $data['zip']);
-                add_metadata('post', $id, 'address', $data['address']);
-                add_metadata('post', $id, 'latitude', $data['latitude']);
-                add_metadata('post', $id, 'longitude', $data['longitude']);
-                add_metadata('post', $id, 'latitude', $data['latitude']);
-                add_metadata('post', $id, 'url', $data['url']);
-                add_metadata('post', $id, 'map_url', $data['map_url']);
-                add_metadata('post', $id, 'type', $data['type']);
+
+                $keys = array( 'type', 'country', 'state', 'county', 'city',
+                        'zip', 'address', 'latitude', 'longitude', 'url',
+                        'map_url' );
+
+                foreach ( $keys as $place_meta_key ) {
+                    if ( array_key_exists( $place_meta_key, $data ) ) {
+                        add_metadata( 'post', $id, $place_meta_key,
+                                $data[$place_meta_key] );
+                    }
+                }
+
                 echo json_encode($id);
                 die;
                 break;
@@ -360,12 +364,6 @@ class myFOSSIL_Resources_Public
         wp_enqueue_script( 'googlemaps',
                 '//maps.googleapis.com/maps/api/js?sensor=false',
                 array( 'jquery' ), $this->version, false );
-
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
-                'js/myfossil-resources-public.js', array( 'jquery' ),
-                $this->version, false );
-
-        
     }
     // }}}
 }

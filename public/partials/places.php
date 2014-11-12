@@ -1,0 +1,9 @@
+<?php
+namespace myFOSSIL\Plugin\Resources;
+
+require_once( 'map.php' );
+require_once( 'places/create_button.php' );
+require_once( 'places/filters.php' );
+require_once( 'places/list.php' );
+require_once( 'places/modal.php' );
+require_once( 'places/place-template.php' );
