@@ -362,7 +362,11 @@ class myFOSSIL_Resources_Public
                 array( 'jquery' ), $this->version, false );
 
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
-                'js/myfossil-resources-public.js', array( 'jquery' ),
+                'js/places.js', array( 'jquery' ),
+                $this->version, false );
+
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
+                'js/events.js', array( 'jquery' ),
                 $this->version, false );
 
         
