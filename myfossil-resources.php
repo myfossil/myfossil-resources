@@ -84,14 +84,6 @@ function myfossil_admin_enqueue_scripts() {
 add_action( 'admin_enqueue_scripts', __namespace__ . '\myfossil_admin_enqueue_scripts' );
 
 /**
- * Hide Advanced Custom Fields
- *
- * @see {@link http://www.advancedcustomfields.com/resources/including-acf-in-a-plugin-theme/}
- */
-define( 'ACF_LITE' , true );
-
-
-/**
  * Begins execution of the plugin.
  *
  * Since everything within the plugin is registered via hooks, then kicking off

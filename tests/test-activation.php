@@ -15,8 +15,6 @@ class PluginActivationComponentsTest extends Tests\myFOSSIL_Resources_Test
      */
     public function testCptPlaceWithAcf() {
         $this->assertNotFalse( myFOSSIL_Resources_Admin::create_places() );
-        $this->assertNotFalse( myFOSSIL_Resources_Admin::create_places_acf() );
-        $this->assertNotFalse( myFOSSIL_Resources_Admin::acf_compatible( 'place' ) );
         $this->assertNotFalse( post_type_exists( 'place' ) );
     }
 
@@ -25,35 +23,6 @@ class PluginActivationComponentsTest extends Tests\myFOSSIL_Resources_Test
      */
     public function testCptEventWithAcf() {
         $this->assertNotFalse( myFOSSIL_Resources_Admin::create_events() );
-        $this->assertNotFalse( myFOSSIL_Resources_Admin::create_events_acf() );
-        $this->assertNotFalse( myFOSSIL_Resources_Admin::acf_compatible( 'event' ) );
         $this->assertNotFalse( post_type_exists( 'event' ) );
-    }
-
-    /**
-     * Test that the data loader is working.
-     *
-     * @depends testCptPlaceWithAcf
-     */
-    public function testLoadPlacesFromCsv() {
-        $this->assertNotFalse( myFOSSIL_Resources_Admin::acf_compatible( 'place' ) );
-        $this->assertNotFalse( myFOSSIL_Resources_Admin::load_data_places() );
-
-        // Test that we actually have something...
-        $data = array(
-                'country' => "US",
-                'state' => "California",
-                'type' => "Museum",
-                'city' => "Los Angeles",
-                'latitude' => 34.052234,
-                'longitude' => -118.243685,
-                'url' => "www.nhm.org",
-            );
-
-        $title = "Natural History Museum of Los Angeles County";
-        $post_object = get_page_by_title( $title, OBJECT, 'place' );
-
-        foreach ( get_fields( $post_object->ID ) as $field_name => $value )
-            $this->assertEquals( $value, $data[ $field_name ] );
     }
 }
