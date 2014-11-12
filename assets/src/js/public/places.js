@@ -105,7 +105,7 @@
             },
             error: function( err ) {
                 console.log( err );
-                $( '#loading-types' ).text( '<i class="fa fa-fw fa-warning"></i> Error' );
+                $( '#loading-types' ).html( '<i class="fa fa-fw fa-warning"></i> Error' );
             }
         });
 
@@ -238,6 +238,7 @@
                     $( this ).modal( 'hide' );
                 },
                 error: function( err ) {
+                    console.info( data );
                     console.error( err );
                 }
             });
@@ -271,7 +272,8 @@
             // Setup filters and listeners
             init_places_filters_state();
 
-            //init_places_filters_type();  // the extra function call for issue #8
+            init_places_filters_type();  // the extra function call for issue #8
+
             $( '#state-filter' ).change( filter_places );
             $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_places );
 

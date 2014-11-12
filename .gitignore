@@ -44,3 +44,4 @@ vendor
 .phptidy-cache
 node_modules
 static
+assets/staging
