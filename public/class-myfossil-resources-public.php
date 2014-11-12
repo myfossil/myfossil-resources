@@ -1,6 +1,9 @@
 <?php
 namespace myFOSSIL\Plugin\Resources;
 
+require_once( 'partials/places.php' );
+require_once( 'partials/events.php' );
+
 /**
  * The public-facing functionality of the plugin.
  *
