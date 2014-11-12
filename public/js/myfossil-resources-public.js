@@ -19,7 +19,7 @@
                 json = data;
             },
             error: function ( err ) {
-                console.log( err );
+                console.error( err );
             }
         });
 
@@ -160,13 +160,13 @@
             },
             dataType: 'json',
             success: function( states ) {
-		console.log(states);
-		console.log($('#state'));
                 $( '#state-filter' ).append( '<option>United States</option>' );
+
                 states.forEach( function( state ) {
                     tpl = '<option value="' + state + '">' + state + '</option>';
                     $( '#state-filter' ).append( tpl );
                 });
+
                 $( '#state-filter' ).prop( 'disabled', false );
                 $( '#loading-states' ).remove();
             },
@@ -228,7 +228,7 @@
             state = $( '#state-filter' ).val();
 
         // Reset, hide all.
-        $( 'div.panel' ).hide();
+        $( 'div.place' ).hide();
 
         // Filter by type and state where ( type && state ).
         $( 'input:checkbox:checked' )
@@ -256,7 +256,7 @@
             dt = $( '#month-year' ).val();
 
         // Reset, hide all.
-        $( 'div.panel' ).hide();
+        $( 'div.event' ).hide();
 
         // Filter by type and state where ( type && state ).
         $( 'input:checkbox:checked' )
@@ -521,122 +521,130 @@
     }
     // }}}
 
-    // Create place form submission
+    // {{{ create_place_submit
     function create_place_submit() {
         var nonce = $( '#myfr_filter_nonce' ).val(); 
-	$('#new-place-form').submit(function(event) {
-	    event.preventDefault();
-	    event.stopPropagation();
 
-	    // Get all the data
-	    var data = {
-		"name" : $('#new-place-form').find('#name').val(),
-		"description" : $('#new-place-form').find('#description').val(),
-		"type" : $('#new-place-form').find('#type').val(),
-		"country" : $('#new-place-form').find('#country').val(),
-		"state" : $('#new-place-form').find('#state').val(),
-		"county" : $('#new-place-form').find('#county').val(),
-		"city" : $('#new-place-form').find('#city').val(),
-		"zip" : $('#new-place-form').find('#zip').val(),
-		"address" : $('#new-place-form').find('#address').val(),
-		"latitude" : $('#new-place-form').find('#latitude').val(),
-		"longitude" : $('#new-place-form').find('#longitude').val(),
-		"url" : $('#new-place-form').find('#url').val(),
-		"map_url" : $('#new-place-form').find('#map_url').val(),
-	    }
+        $('#new-place-form').submit( function( event ) {
+            // Prevent default browser submit behavior on Enter keydown
+            event.preventDefault();
+            event.stopPropagation();
 
-	    console.log(data);
-	    // Perform the ajax call 
-	    $.ajax({
+            // Pull Place data from modal
+            var data = {};
+            var data_keys = [ 'name', 'description', 'type', 'country',
+                    'state', 'county', 'city', 'zip', 'address', 'latitude',
+                    'longitude', 'url', 'map_url' ];
+            $.map( data_keys, function( key ) {
+                data[key] = $( this ).find( '#' + key ).val();
+            });
+
+            // Perform the ajax call 
+            $.ajax({
                 type: 'post',
-		url: ajaxurl,
-		data: { 
-		    'action': 'myfr_create_place',
-		    'nonce': nonce,
-		    'data': data
-		},
-		dataType: 'json',
-		success: function( response ) {
-		    console.log(response);
-		},
-		failure: function() {
-		    console.log('fail');
-		}, 
-		error: function() {
-		    console.log('error');
-		}
-	    });
-
-	    // Return successful
-	    console.log('submitted');
-	});
-	
+                url: ajaxurl,
+                data: { 
+                    'action': 'myfr_create_place',
+                    'nonce': nonce,
+                    'data': data
+                },
+                dataType: 'json',
+                success: function( response ) {
+                    // Added successfully, hide modal
+                    $( this ).modal( 'hide' );
+                },
+                error: function( err ) {
+                    console.error( err );
+                }
+            });
+        });
     }
+    // }}}
 
-    // Clear filters button
-     function clear_place_filters() {
-	$('#clear-filters').click(function() {
-	    console.log('clear');
-	    $('#state-filter').val($('#state-filter option:first').val());
-	    var $checkboxes = $('#types-selected').find('input');
-	    $checkboxes.each(function() {
-		$(this).prop('checked', true);
-	    });
-	    filter_places();
-	});
-    }
+    // {{{ clear_place_filters
+    function clear_place_filters() {
+        $('#clear-filters').click(function() {
+            // Reset state dropdown
+            $('#state-filter').val($('#state-filter option:first').val());
 
-   function clear_event_filters() {
-	$('#clear-filters').click(function() {
-	    console.log('clear');
-	    $('#state').val($('#state option:first').val());
-	    $('#month-year').val($('#month-year option:first').val());
-	    var $checkboxes = $('#types-selected').find('input');
-	    $checkboxes.each(function() {
-		$(this).prop('checked', true);
-	    });
-	    filter_events();
-	});
+            // Reset type checkboxes
+            var checkboxes = $('#types-selected').find('input');
+            checkboxes.each(function() {
+                $(this).prop('checked', true);
+            });
+
+            // Trigger update of Places
+            filter_places();
+        });
     }
+    // }}}
+
+    // {{{ clear_event_filters
+    function clear_event_filters() {
+        $('#clear-filters').click(function() {
+            // Reset state and date dropdowns
+            $('#state').val($('#state option:first').val());
+            $('#month-year').val($('#month-year option:first').val());
+
+            // Reset type checkboxes
+            var checkboxes = $('#types-selected').find('input');
+            checkboxes.each(function() {
+                $(this).prop('checked', true);
+            });
+
+            // Trigger update of Events
+            filter_events();
+        });
+    }
+    // }}}
 
     $( function() {
 
+        // Check if this is the Places page
+        // @todo Refactor to only load this JavaScript on Places page
         if ( !! $( '#places-list' ).length ) {
+            // Initialize Places
             init_places();
             
-            // Setup filters and listeners.
+            // Setup filters and listeners
             init_places_filters_state();
+
             //init_places_filters_type();  // the extra function call for issue #8
             $( '#state-filter' ).change( filter_places );
             $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_places );
 
-            // Load up Google map with markers.
+            // Load Google Map with markers
             google.maps.event.addDomListener( window, 'load', init_places_map );
 
-	    // Load form submission
-	    create_place_submit();
+            // Initialize Place creation form behavior
+            create_place_submit();
 
-	    // Listeners
-	    clear_place_filters();
-	}
+            // Initialize Place filters
+            clear_place_filters();
+        }
 
+        // Check if this is the Events page
+        // @todo Refactor to only load this JavaScript on Events page
         if ( !! $( '#events-list' ).length ) {
+            // Initialize Events
             init_events();
 
-            // Setup filters and listeners.
+            // Setup filters
             init_events_filters_state();
             init_events_filters_type();
             init_events_filters_month_year();
+
+            // Setup listeners
             $( '#state' ).change( filter_events );
             $( '#month-year' ).change( filter_events );
             $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_events );
 
-            // Load up Google map with markers.
+            // Load up Google Map with markers
             google.maps.event.addDomListener(window, 'load', init_events_map);
        
-	    // Listeners
-	    clear_event_filters();
-	}
+            // Reset filters
+            clear_event_filters();
+        }
 
     } );
 
