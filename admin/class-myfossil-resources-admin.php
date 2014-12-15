@@ -212,7 +212,7 @@ class myFOSSIL_Resources_Admin
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) .
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( realpath( __FILE__ ) ) .
                 'css/myfossil-resources-admin.css', array(), $this->version,
                 'all' );
 
@@ -240,7 +240,7 @@ class myFOSSIL_Resources_Admin
          * between the defined hooks and the functions defined in this
          * class.
          */
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) .
+        wp_enqueue_script( $this->plugin_name, plugin_dir_url( realpath( __FILE__ ) ) .
                 'js/myfossil-resources-admin.js', array( 'jquery' ),
                 $this->version, false );
     }

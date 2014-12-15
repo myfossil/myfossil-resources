@@ -340,7 +340,7 @@ class myFOSSIL_Resources_Public
          * relationship between the defined hooks and the functions defined in
          * this class.
          */
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) .
+        wp_enqueue_style( $this->plugin_name, plugin_dir_url( realpath( __FILE__ ) ) .
                 'css/myfossil-resources-public.css', array(), $this->version,
                 'all' );
 

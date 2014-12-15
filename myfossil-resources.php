@@ -9,16 +9,16 @@ namespace myFOSSIL\Plugin\Resources;
  * the plugin, registers the activation and deactivation functions, and defines
  * a function that starts the plugin.
  *
- * @link              http://github.com/myfossil
+ * @link              http://github.com/myfossil/myfossil-resources
  * @package           myFOSSIL_Resources
  *
  * @wordpress-plugin
  * Plugin Name:       myFOSSIL Resources
- * Plugin URI:        https://github.com/myfossil
+ * Plugin URI:        https://github.com/myfossil/myfossil-resources
  * Description:       Adds Places and Events to WordPress.
- * Version:           0.3.0
+ * Version:           0.3.1
  * Author:            myFOSSIL
- * Author URI:        http://myfossil.org/
+ * Author URI:        https://github.com/myfossil/
  * License:           BSD
  * Text Domain:       myfossil-resources
  * Domain Path:       /languages
@@ -31,19 +31,19 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * The code that runs during plugin activation.
  */
-require_once( plugin_dir_path( __FILE__ ) .
+require_once( plugin_dir_path( realpath( __FILE__ ) ) .
         'includes/class-myfossil-resources-activator.php' );
 
 /**
  * The code that runs during plugin deactivation.
  */
-require_once( plugin_dir_path( __FILE__ ) .
+require_once( plugin_dir_path( realpath( __FILE__ ) ) .
         'includes/class-myfossil-resources-deactivator.php' );
 
 /* 
  * This action is documented in includes/class-myfossil-resources-activator.php
  */
-register_activation_hook( __FILE__, array(
+register_activation_hook( realpath( __FILE__ ), array(
             'myFOSSIL\Plugin\Resources\myFOSSIL_Resources_Activator',
             'activate' ) );
 
@@ -51,7 +51,7 @@ register_activation_hook( __FILE__, array(
  * This action is documented in
  * includes/class-myfossil-resources-deactivator.php 
  */
-register_deactivation_hook( __FILE__, array(
+register_deactivation_hook( realpath( __FILE__ ), array(
             'myFOSSIL\Plugin\Resources\myFOSSIL_Resources_Deactivator',
             'deactivate' ) );
 
@@ -59,25 +59,25 @@ register_deactivation_hook( __FILE__, array(
  * The core plugin class that is used to define internationalization,
  * dashboard-specific hooks, and public-facing site hooks.
  */
-require_once( plugin_dir_path( __FILE__ ) .
+require_once( plugin_dir_path( realpath( __FILE__ ) ) .
         'includes/class-myfossil-resources.php' );
 
 function myfossil_enqueue_scripts() {
     wp_enqueue_script( 'myfossil-resources-public-docs', 
-            plugin_dir_url( __FILE__ ) .  'static/js/public-docs.min.js',
+            plugin_dir_url( realpath( __FILE__ ) ) .  'static/js/public-docs.min.js',
             array( 'jquery' ) );
     wp_enqueue_script( 'myfossil-resources-public-events', 
-            plugin_dir_url( __FILE__ ) .  'static/js/public-events.min.js',
+            plugin_dir_url( realpath( __FILE__ ) ) .  'static/js/public-events.min.js',
             array( 'jquery' ) );
     wp_enqueue_script( 'myfossil-resources-public-places', 
-            plugin_dir_url( __FILE__ ) .  'static/js/public-places.min.js',
+            plugin_dir_url( realpath( __FILE__ ) ) .  'static/js/public-places.min.js',
             array( 'jquery' ) );
 }
 add_action( 'wp_enqueue_scripts', __namespace__ . '\myfossil_enqueue_scripts' );
 
 function myfossil_admin_enqueue_scripts() {
     wp_enqueue_script( 'myfossil-resources-admin', 
-            plugin_dir_url( __FILE__ ) .  'static/js/admin.min.js',
+            plugin_dir_url( realpath( __FILE__ ) ) .  'static/js/admin.min.js',
             array( 'jquery' ) );
 }
 add_action( 'admin_enqueue_scripts', __namespace__ . '\myfossil_admin_enqueue_scripts' );
