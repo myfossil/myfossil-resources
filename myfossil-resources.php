@@ -10,16 +10,15 @@ namespace myFOSSIL\Plugin\Resources;
  * a function that starts the plugin.
  *
  * @link              http://github.com/myfossil
- * @since             0.0.1
  * @package           myFOSSIL_Resources
  *
  * @wordpress-plugin
  * Plugin Name:       myFOSSIL Resources
  * Plugin URI:        https://github.com/myfossil
  * Description:       Adds Places and Events to WordPress.
- * Version:           0.0.1
- * Author:            AtmoApps
- * Author URI:        http://atmoapps.com
+ * Version:           0.3.0
+ * Author:            myFOSSIL
+ * Author URI:        http://myfossil.org/
  * License:           BSD
  * Text Domain:       myfossil-resources
  * Domain Path:       /languages
