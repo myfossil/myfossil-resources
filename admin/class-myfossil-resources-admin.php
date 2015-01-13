@@ -67,64 +67,6 @@ class myFOSSIL_Resources_Admin
                 'myFOSSIL\Plugin\Resources\Admin\admin_settings_page' );
     }
 
-    // {{{ Places configuration methods
-    /**
-     * Create the custom post type Place.
-     *
-     * This function also calls the function to create the Advanced Custom
-     * Fields (ACF) for the Place post type.
-     *
-     * @author  Joseph Furlott <jmfurlott@geometeor.com>
-     * @author  Brandon Wood <btwood@geometeor.com>
-     * @since   0.0.1
-     * @static
-     * @param bool    $acf (optional) Whether to create ACF for post type, default true.
-     * @return  bool    True upon success, false upon failure.
-     */
-    public static function create_places()
-    {
-        // {{{ Places, labels
-        $labels = array(
-            'name'               => __( 'Places', 'fossil' ),
-            'singular_name'      => __( 'Place', 'fossil' ),
-            'menu_name'          => __( 'Places', 'fossil' ),
-            'name_admin_bar'     => __( 'Place', 'fossil' ),
-            'add_new'            => __( 'Add New', 'fossil' ),
-            'add_new_item'       => __( 'Add New Place', 'fossil' ),
-            'new_item'           => __( 'New Place', 'fossil' ),
-            'edit_item'          => __( 'Edit Place', 'fossil' ),
-            'view_item'          => __( 'View Place', 'fossil' ),
-            'all_items'          => __( 'All Places', 'fossil' ),
-            'search_items'       => __( 'Search Places', 'fossil' ),
-            'parent_item_colon'  => __( 'Parent Places:', 'fossil' ),
-            'not_found'          => __( 'No Places found.', 'fossil' ),
-            'not_found_in_trash' => __( 'No Places found in Trash.', 'fossil' )
-        );
-        // }}}
-        // {{{ Places, arguments
-        $args = array(
-            'labels'             => $labels,
-            'public'             => true,
-            'publicly_queryable' => true,
-            'show_ui'            => true,
-            'show_in_menu'       => true,
-            'query_var'          => true,
-            'menu_icon'          => 'dashicons-location-alt',
-            'rewrite'            => array( 'slug' => 'place' ),
-            'capability_type'    => 'post',
-            'has_archive'        => true,
-            'hierarchical'       => false,
-            'menu_position'      => null,
-            'supports'           => array( 'title', 'editor', 'author', 'thumbnail',  'comments' )
-        );
-        // }}}
-
-        // Tell WordPress.
-        return register_post_type( 'place', $args );
-    }
-
-    // }}}
-
     // {{{ Events configuration methods
     /**
      * Create the custom post type Event.

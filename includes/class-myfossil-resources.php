@@ -171,7 +171,6 @@ class myFOSSIL_Resources
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'register_menus' );
 
         /* Custom Post Types */
-        $this->loader->add_action( 'init', $plugin_admin, 'create_places' );
         $this->loader->add_action( 'init', $plugin_admin, 'create_events' );
 
         /* AJAX */

@@ -11,14 +11,6 @@ namespace myFOSSIL\Plugin\Resources;
 class PluginActivationComponentsTest extends Tests\myFOSSIL_Resources_Test 
 {
     /**
-     * Test that Place custom post type (CPT) created with ACF.
-     */
-    public function testCptPlaceWithAcf() {
-        $this->assertNotFalse( myFOSSIL_Resources_Admin::create_places() );
-        $this->assertNotFalse( post_type_exists( 'place' ) );
-    }
-
-    /**
      * Test that Event custom post type (CPT) created with ACF.
      */
     public function testCptEventWithAcf() {
