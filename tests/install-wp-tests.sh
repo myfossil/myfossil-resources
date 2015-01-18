@@ -1,16 +1,9 @@
 #!/usr/bin/env bash
-
-if [ $# -lt 3 ]; then
-	echo "usage: $0 <db-name> <db-user> <db-pass> [db-host] [wp-version]"
-	exit 1
-fi
-
-DB_NAME=$1
-DB_USER=$2
-DB_PASS=$3
-DB_HOST=${4-localhost}
-WP_VERSION=${5-latest}
-
+DB_NAME=${1-wp_myfossil_test}
+DB_USER=${2-wp_myfossil}
+DB_PASS=${3-wp_myfossil}
+DB_HOST=${4-0.0.0.0:13306}
+WP_VERSION=latest
 WP_TESTS_DIR=${WP_TESTS_DIR-/tmp/wordpress-tests-lib}
 WP_CORE_DIR=/tmp/wordpress/
 
