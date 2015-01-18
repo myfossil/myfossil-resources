@@ -205,49 +205,6 @@
     }
     // }}}
 
-    // {{{ create_place_submit
-    function create_place_submit() {
-        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
-
-        $('#new-place-form').submit( function( event ) {
-            // Prevent default browser submit behavior on Enter keydown
-            event.preventDefault();
-            event.stopPropagation();
-
-            // Pull Place data from modal
-            var data = {};
-            var data_keys = [ 'name', 'description', 'type', 'country',
-                    'state', 'county', 'city', 'zip', 'address', 'latitude',
-                    'longitude', 'url', 'map_url' ];
-            $.map( data_keys, function( key ) {
-                data[key] = $( 'input#' + key ).val();
-                if ( key === 'type' ) data[key] = $( 'select#type' ).val();
-            });
-
-            // Perform the ajax call 
-            $.ajax({
-                type: 'post',
-                url: ajaxurl,
-                data: { 
-                    'action': 'myfossil_resources_create_place',
-                    'nonce': nonce,
-                    'data': data
-                },
-                dataType: 'json',
-                success: function( response ) {
-                    // Added successfully, hide modal
-                    $( '#placesModal' ).modal( 'hide' );
-                    location.reload();
-                },
-                error: function( err ) {
-                    console.info( data );
-                    console.error( err );
-                }
-            });
-        });
-    }
-    // }}}
-
     // {{{ clear_place_filters
     function clear_place_filters() {
         $('#clear-filters').click(function() {

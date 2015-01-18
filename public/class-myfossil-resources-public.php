@@ -289,32 +289,6 @@ class myFOSSIL_Resources_Public
 
                 die;
                 break;
-
-            case 'myfossil_resources_create_place':
-                $data = $_POST['data'];
-                $post_data = array(
-                    'post_type'  => 'place',
-                    'post_title' => $data['name'],
-                    'post_content' => $data['description'],
-                    'post_status' => 'publish'
-                );
-                
-                $id = wp_insert_post($post_data);
-
-                $keys = array( 'type', 'country', 'state', 'county', 'city',
-                        'zip', 'address', 'latitude', 'longitude', 'url',
-                        'map_url' );
-
-                foreach ( $keys as $place_meta_key ) {
-                    if ( array_key_exists( $place_meta_key, $data ) ) {
-                        add_metadata( 'post', $id, $place_meta_key,
-                                $data[$place_meta_key] );
-                    }
-                }
-
-                echo json_encode($id);
-                die;
-                break;
         }
     }
     // }}}
