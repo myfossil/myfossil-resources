@@ -3,7 +3,7 @@
 
     // {{{ get_events
     function get_events() {
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
         var json = null;
 
         $.ajax({
@@ -11,7 +11,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_events',
+                'action': 'myfossil_resources_list_events',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -34,7 +34,7 @@
     function init_events() {
         var tpl_src = $( '#tpl-events' ).html();
         var tpl = Handlebars.compile( tpl_src );
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // Populate Events list
         $( '#events-list' ).html( tpl( get_events() ) );
@@ -48,7 +48,7 @@
                     type: 'post',
                     url: ajaxurl,
                     data: { 
-                            'action': 'myfr_filter_start_date',
+                            'action': 'myfossil_resources_filter_start_date',
                             'nonce': nonce,
                             'start_date': $('#start-date-picker').val(),
                             'end_date': $('#end-date-picker').val()
@@ -81,7 +81,7 @@
                     type: 'post',
                     url: ajaxurl,
                     data: { 
-                        'action': 'myfr_filter_end_date',
+                        'action': 'myfossil_resources_filter_end_date',
                         'nonce': nonce,
                         'start_date': $('#start-date-picker').val(),
                         'end_date': $('#end-date-picker').val()
@@ -142,7 +142,7 @@
     // {{{ init_events_filters_state
     function init_events_filters_state() {
         var tpl;
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // toggle loading
         $( '#state' ).prop( 'disabled', true );
@@ -152,7 +152,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_events_states',
+                'action': 'myfossil_resources_list_events_states',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -178,7 +178,7 @@
     // {{{ init_events_filters_month_year
     function init_events_filters_month_year() {
         var tpl;
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // toggle loading
         $( '#month-year' ).prop( 'disabled', true );
@@ -188,7 +188,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_events_month_years',
+                'action': 'myfossil_resources_list_events_month_years',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -218,7 +218,7 @@
     // {{{ init_events_filters_type
     function init_events_filters_type() {
         var tpl;
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // toggle loading
         $( '#types-selected' ).append( 
@@ -228,7 +228,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_events_types',
+                'action': 'myfossil_resources_list_events_types',
                 'nonce': nonce,
             },
             dataType: 'json',

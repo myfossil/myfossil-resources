@@ -128,7 +128,7 @@ class myFOSSIL_Resources_Admin
      * ajax callback for admin panel ajax
      */
     public function ajax_handler() {
-        if ( $_POST[ 'action'] == 'myfr_load_data' ) {
+        if ( $_POST[ 'action'] == 'myfossil_resources_load_data' ) {
             echo (int) self::load_data_places();
         }
         die();

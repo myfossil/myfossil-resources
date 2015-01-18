@@ -174,7 +174,7 @@ class myFOSSIL_Resources
         $this->loader->add_action( 'init', $plugin_admin, 'create_events' );
 
         /* AJAX */
-        $this->loader->add_action( 'wp_ajax_myfr_load_data', $plugin_admin,
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_load_data', $plugin_admin,
                 'ajax_handler' );
     }
 
@@ -196,46 +196,46 @@ class myFOSSIL_Resources
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public,
                 'enqueue_scripts' );
 
-        $this->loader->add_action( 'wp_ajax_myfr_list_states', $plugin_public,
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_list_states', $plugin_public,
                 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_list_types', $plugin_public,
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_list_types', $plugin_public,
                 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_list_places', $plugin_public,
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_list_places', $plugin_public,
                 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_list_events', $plugin_public,
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_list_events', $plugin_public,
                 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_filter_start_date',
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_filter_start_date',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_filter_end_date',
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_filter_end_date',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_list_events_states',
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_list_events_states',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_list_events_types',
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_list_events_types',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_list_events_month_years',
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_list_events_month_years',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_myfr_create_place',
+        $this->loader->add_action( 'wp_ajax_myfossil_resources_create_place',
                 $plugin_public, 'ajax_handler' );
 
         // Public
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_states',
+        $this->loader->add_action( 'wp_ajax_nopriv_myfossil_resources_list_states',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_types',
+        $this->loader->add_action( 'wp_ajax_nopriv_myfossil_resources_list_types',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_places',
+        $this->loader->add_action( 'wp_ajax_nopriv_myfossil_resources_list_places',
                 $plugin_public, 'ajax_handler' );
         $this->loader->add_action( 'wp_ajax_nopriv_start_date', $plugin_public,
                 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_filter_start_date',
+        $this->loader->add_action( 'wp_ajax_nopriv_myfossil_resources_filter_start_date',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_filter_end_date',
+        $this->loader->add_action( 'wp_ajax_nopriv_myfossil_resources_filter_end_date',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_events_states',
+        $this->loader->add_action( 'wp_ajax_nopriv_myfossil_resources_list_events_states',
                 $plugin_public, 'ajax_handler' );
-        $this->loader->add_action( 'wp_ajax_nopriv_myfr_list_events_types',
+        $this->loader->add_action( 'wp_ajax_nopriv_myfossil_resources_list_events_types',
                 $plugin_public, 'ajax_handler' );
         $this->loader->add_action(
-                'wp_ajax_nopriv_myfr_list_events_month_years', $plugin_public,
+                'wp_ajax_nopriv_myfossil_resources_list_events_month_years', $plugin_public,
                 'ajax_handler' );
     }
 

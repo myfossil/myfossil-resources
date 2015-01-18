@@ -3,7 +3,7 @@
 
     // {{{ get_places 
     function get_places() {
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
         var json = null;
 
         $.ajax({
@@ -11,7 +11,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_places',
+                'action': 'myfossil_resources_list_places',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -38,7 +38,7 @@
     // {{{ init_places_filters_state
     function init_places_filters_state() {
         var tpl;
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // toggle loading
         $( '#state-filter' ).prop( 'disabled', true );
@@ -48,7 +48,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_states',
+                'action': 'myfossil_resources_list_states',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -79,7 +79,7 @@
     // {{{ init_places_filters_type
     function init_places_filters_type() {
         var tpl;
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // toggle loading
         $( '#types-selected' ).append( 
@@ -89,7 +89,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_types',
+                'action': 'myfossil_resources_list_types',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -207,7 +207,7 @@
 
     // {{{ create_place_submit
     function create_place_submit() {
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         $('#new-place-form').submit( function( event ) {
             // Prevent default browser submit behavior on Enter keydown
@@ -229,7 +229,7 @@
                 type: 'post',
                 url: ajaxurl,
                 data: { 
-                    'action': 'myfr_create_place',
+                    'action': 'myfossil_resources_create_place',
                     'nonce': nonce,
                     'data': data
                 },

@@ -85,7 +85,7 @@ class myFOSSIL_Resources_Public
         header('Content-Type: application/json');
 
         // Check nonce
-        if ( !check_ajax_referer( 'myfr_filter', 'nonce', false ) ) {
+        if ( !check_ajax_referer( 'myfossil_resources_filter', 'nonce', false ) ) {
             $return_args = array(
                 "result" => "Error",
                 "message" => "403 Forbidden",
@@ -110,7 +110,7 @@ class myFOSSIL_Resources_Public
             );
 
         switch ( $_POST['action'] ) {
-            case 'myfr_list_states':
+            case 'myfossil_resources_list_states':
                 $states = array();
                 foreach ( $places as $pl )
                     $states[] = parse_meta( get_post_meta( $pl->ID ) )[ 'state' ];
@@ -122,7 +122,7 @@ class myFOSSIL_Resources_Public
                 break;
 
 
-            case 'myfr_list_events_states':
+            case 'myfossil_resources_list_events_states':
                 $states = array();
                 foreach ( $events as $ev ) {
                     $meta = parse_meta( get_post_meta( $ev->ID ) );
@@ -146,7 +146,7 @@ class myFOSSIL_Resources_Public
                 break;
 
 
-            case 'myfr_list_events_types':
+            case 'myfossil_resources_list_events_types':
                 $types = array();
                 foreach ( $events as $ev )
                     $types[] = parse_meta( get_post_meta( $ev->ID ) )[ 'type' ];
@@ -157,7 +157,7 @@ class myFOSSIL_Resources_Public
                 die;
                 break;
 
-            case 'myfr_list_events_month_years':
+            case 'myfossil_resources_list_events_month_years':
                 $month_years = array();
                 foreach ( $events as $ev ) {
                     $meta = parse_meta( get_post_meta( $ev->ID ) );
@@ -176,7 +176,7 @@ class myFOSSIL_Resources_Public
                 break;
 
 
-            case 'myfr_list_types':
+            case 'myfossil_resources_list_types':
                 $types = array();
                 foreach ( $places as $pl )
                     $types[] = parse_meta( get_post_meta( $pl->ID ) )[ 'type' ];
@@ -188,7 +188,7 @@ class myFOSSIL_Resources_Public
                 break;
 
 
-            case 'myfr_list_places':
+            case 'myfossil_resources_list_places':
                 $pl_array = array();
                 foreach ( $places as $pl ) {
                     $fields = parse_meta( get_post_meta( $pl->ID ) );
@@ -204,7 +204,7 @@ class myFOSSIL_Resources_Public
                 die;
                 break;
 
-            case 'myfr_list_events':
+            case 'myfossil_resources_list_events':
                 $ev_array = array();
                 foreach ( $events as $ev ) {
                     $fields = parse_meta( get_post_meta( $ev->ID ) );
@@ -237,7 +237,7 @@ class myFOSSIL_Resources_Public
                 die;
                 break;
 
-            case 'myfr_filter_start_date':
+            case 'myfossil_resources_filter_start_date':
                 $start_date = $_POST['start_date'];
                 $start_date = date_create_from_format("m/d/Y",$start_date); 
                 $end_date = date_create_from_format("m/d/Y",$_POST['end_date']);
@@ -265,7 +265,7 @@ class myFOSSIL_Resources_Public
                 die;
                 break;
 
-            case 'myfr_filter_end_date':
+            case 'myfossil_resources_filter_end_date':
                 $end_date = $_POST['end_date'];
                 $end_date = date_create_from_format("m/d/Y",$end_date);
                 $start_date = new \DateTime('now');
@@ -290,7 +290,7 @@ class myFOSSIL_Resources_Public
                 die;
                 break;
 
-            case 'myfr_create_place':
+            case 'myfossil_resources_create_place':
                 $data = $_POST['data'];
                 $post_data = array(
                     'post_type'  => 'place',
