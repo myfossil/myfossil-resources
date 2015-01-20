@@ -67,10 +67,7 @@
             error: function( err ) {
                 console.log( err );
                 $( '#loading-states' ).text( 'Error' );
-            },
-	    failure: function(err) {
-		console.log('failure');
-	    }
+            }
         });
 
         return 1;

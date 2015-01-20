@@ -103,6 +103,23 @@ class myFOSSIL_Resources_Public
             )
         );
 
+        // Massage the data structure to be nicer for JSON
+        $pl = array();
+        foreach ( $places['groups'] as $place ) {
+            $p = $place;
+            foreach ( groups_get_groupmeta( $place->id, '' ) as $k => $v ) {
+                if ( is_array( $v ) && count( $v ) == 1 ) {
+                    $v = array_pop( $v );
+                }
+                $p->{$k} = $v;
+            }
+            if ( ! property_exists( $p, 'type' ) ) {
+                $p->type = 'other';
+            }
+            $pl[] = $p;
+        }
+        $places = $pl;
+
         $events = get_posts( 
                 array( 
                     'post_type' => 'event', 
@@ -113,11 +130,12 @@ class myFOSSIL_Resources_Public
         switch ( $_POST['action'] ) {
             case 'myfossil_resources_list_states':
                 $states = array();
-                /*
-                foreach ( $places as $pl )
-                    $states[] = parse_meta( get_post_meta( $pl->ID ) )[ 'state' ];
+                foreach ( $places as $pl ) {
+                    if ( property_exists( $pl, 'state' ) ) {
+                        $states[] = $pl->state;
+                    }
+                }
                 asort( $states );
-                */
 
                 echo json_encode( array_values( array_unique( $states ) ) );
                 die;
@@ -181,11 +199,12 @@ class myFOSSIL_Resources_Public
 
             case 'myfossil_resources_list_types':
                 $types = array();
-                /*
-                foreach ( $places as $pl )
-                    $types[] = parse_meta( get_post_meta( $pl->ID ) )[ 'type' ];
+                foreach ( $places as $pl ) {
+                    if ( property_exists( $pl, 'type' ) ) {
+                        $types[] = $pl->type;
+                    }
+                }
                 asort( $types );
-                */
 
                 echo json_encode( array_values( array_unique( $types ) ) );
 
@@ -194,21 +213,7 @@ class myFOSSIL_Resources_Public
 
 
             case 'myfossil_resources_list_places':
-                $pl_array = array();
-
-                // Massage the data structure to be nicer for JSON
-                foreach ( $places['groups'] as $place ) {
-                    $p = $place;
-                    foreach ( groups_get_groupmeta( $place->id, '' ) as $k => $v ) {
-                        if ( is_array( $v ) && count( $v ) == 1 ) {
-                            $v = array_pop( $v );
-                        }
-                        $p->{$k} = $v;
-                    }
-                    $pl_array[] = $p;
-                }
-
-                echo json_encode( $pl_array );
+                echo json_encode( $places );
 
                 die;
                 break;
