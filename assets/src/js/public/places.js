@@ -17,6 +17,7 @@
             dataType: 'json',
             success: function( data ) {
                 json = data;
+                console.log("Places:", json);
             },
             error: function ( err ) {
                 console.error( err );
@@ -31,7 +32,7 @@
     function init_places() {
         var tpl_src = $( '#tpl-places' ).html();
         var tpl = Handlebars.compile( tpl_src );
-        $( '#places-list' ).html( tpl( get_places() ) );
+        $( '#places-list' ).html( tpl( { 'places': get_places() } ) );
     }
     // }}}
 
@@ -141,7 +142,7 @@
     
     // {{{ init_places_map
     function init_places_map() {
-        var places = get_places().places;
+        var places = get_places();
 
         var icon_url = "http://maps.google.com/mapfiles/ms/icons/";
         var ch = {
@@ -238,9 +239,6 @@
 
             // Load Google Map with markers
             google.maps.event.addDomListener( window, 'load', init_places_map );
-
-            // Initialize Place creation form behavior
-            create_place_submit();
 
             // Initialize Place filters
             clear_place_filters();

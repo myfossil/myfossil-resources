@@ -8,8 +8,8 @@ function myfossil_places_template() {
                 data-place-state="{{ state }}"
                 data-place-type="{{ type }}">
             <div class="place-body">
-                <h5>{{ title }}</h5>
-                <p>{{ content }}</p>
+                <h5>{{ name }}</h5>
+                <p>{{ description }}</p>
                 <table class="table">
                     <tr>
                         <th>key</th>

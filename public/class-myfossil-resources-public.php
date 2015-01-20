@@ -95,12 +95,13 @@ class myFOSSIL_Resources_Public
             die;
         }
 
-        $places = get_posts( 
-                array( 
-                    'post_type' => 'place', 
-                    'posts_per_page' => -1 
-                )
-            );
+        $places = \BP_Groups_Group::get(
+            array(
+                'populate_extras' => true,
+                'type' => 'alphabetical',
+                'per_page' => -1
+            )
+        );
 
         $events = get_posts( 
                 array( 
@@ -112,9 +113,11 @@ class myFOSSIL_Resources_Public
         switch ( $_POST['action'] ) {
             case 'myfossil_resources_list_states':
                 $states = array();
+                /*
                 foreach ( $places as $pl )
                     $states[] = parse_meta( get_post_meta( $pl->ID ) )[ 'state' ];
                 asort( $states );
+                */
 
                 echo json_encode( array_values( array_unique( $states ) ) );
                 die;
@@ -178,9 +181,11 @@ class myFOSSIL_Resources_Public
 
             case 'myfossil_resources_list_types':
                 $types = array();
+                /*
                 foreach ( $places as $pl )
                     $types[] = parse_meta( get_post_meta( $pl->ID ) )[ 'type' ];
                 asort( $types );
+                */
 
                 echo json_encode( array_values( array_unique( $types ) ) );
 
@@ -190,16 +195,20 @@ class myFOSSIL_Resources_Public
 
             case 'myfossil_resources_list_places':
                 $pl_array = array();
-                foreach ( $places as $pl ) {
-                    $fields = parse_meta( get_post_meta( $pl->ID ) );
-                    
-                    $fields[ 'title' ] = $pl->post_title;
-                    $fields[ 'content' ] = $pl->post_content;
-                    array_push( $pl_array, $fields );
-                    
+
+                // Massage the data structure to be nicer for JSON
+                foreach ( $places['groups'] as $place ) {
+                    $p = $place;
+                    foreach ( groups_get_groupmeta( $place->id, '' ) as $k => $v ) {
+                        if ( is_array( $v ) && count( $v ) == 1 ) {
+                            $v = array_pop( $v );
+                        }
+                        $p->{$k} = $v;
+                    }
+                    $pl_array[] = $p;
                 }
 
-                echo json_encode( array( 'places' => $pl_array ) );
+                echo json_encode( $pl_array );
 
                 die;
                 break;
