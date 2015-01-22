@@ -137,6 +137,7 @@
     }
     // }}}
     
+    // {{{ geocode
     function geocode(place) {
         var address = '';
         if ( place ) {
@@ -160,6 +161,7 @@
             }
         });
     }
+    // }}}
 
     // {{{ init_places_map
     function init_places_map() {
@@ -190,7 +192,7 @@
         // Add a marker for each place on the map.
         places.forEach(
             function( place ) {
-                geocode(place);
+                // geocode(place);
 
                 // Create an info pop-up window for the marker.
                 var info = new google.maps.InfoWindow(

@@ -77,7 +77,6 @@ class myFOSSIL_Resources_Public
         return $months[( $month - 1 )];
     }
 
-    // {{{ AJAX for grabbing stuff
     /**
      * ajax call handler
      *
@@ -88,7 +87,7 @@ class myFOSSIL_Resources_Public
         header( 'Content-Type: application/json' );
 
         // Check nonce
-        if ( !check_ajax_referer( 'myfossil_resources_filter', 'nonce', false ) ) {
+        if ( ! check_ajax_referer( 'myfossil_resources_filter', 'nonce', false ) ) {
             $return_args = array(
                 "result" => "Error",
                 "message" => "403 Forbidden",
@@ -109,6 +108,10 @@ class myFOSSIL_Resources_Public
         // Massage the data structure to be nicer for JSON
         $pl = array();
         foreach ( $places['groups'] as $place ) {
+            if ( ! bp_group_is_visible( $place ) ) {
+                continue;
+            }
+
             $p = $place;
             foreach ( groups_get_groupmeta( $place->id, '' ) as $k => $v ) {
                 if ( is_array( $v ) && count( $v ) == 1 ) {
@@ -123,6 +126,44 @@ class myFOSSIL_Resources_Public
         }
         $places = $pl;
 
+        switch ( $_POST['action'] ) {
+            case 'myfossil_resources_list_places':
+                echo json_encode( $places );
+
+                die;
+                break;
+
+
+            case 'myfossil_resources_list_states':
+                $states = array();
+                foreach ( $places as $pl ) {
+                    if ( property_exists( $pl, 'state' ) ) {
+                        $states[] = $pl->state;
+                    }
+                }
+                asort( $states );
+                echo json_encode( array_values( array_unique( $states ) ) );
+
+                die;
+                break;
+
+
+            case 'myfossil_resources_list_types':
+                $types = array();
+                foreach ( $places as $pl ) {
+                    if ( property_exists( $pl, 'type' ) ) {
+                        $types[] = $pl->type;
+                    }
+                }
+                asort( $types );
+                echo json_encode( array_values( array_unique( $types ) ) );
+
+                die;
+                break;
+
+        }
+
+        // {{{ Events (deprecated)
         /*
         $events = get_posts(
                 array(
@@ -130,98 +171,6 @@ class myFOSSIL_Resources_Public
                     'posts_per_page' => -1
                 )
             );
-        */
-
-        switch ( $_POST['action'] ) {
-        case 'myfossil_resources_list_states':
-            $states = array();
-            foreach ( $places as $pl ) {
-                if ( property_exists( $pl, 'state' ) ) {
-                    $states[] = $pl->state;
-                }
-            }
-            asort( $states );
-
-            echo json_encode( array_values( array_unique( $states ) ) );
-            die;
-
-            break;
-
-
-        case 'myfossil_resources_list_events_states':
-            $states = array();
-            foreach ( $events as $ev ) {
-                $meta = parse_meta( get_post_meta( $ev->ID ) );
-                if ( ! array_key_exists( 'place', $meta ) )
-                    continue;
-
-                // Get Place data
-                $place = get_post_meta( $ev->ID, 'place' );
-                $place_id = $place[0][0]; //only should ever be one
-                $place_meta = parse_meta( get_post_meta( $place_id ) );
-                if ( ! array_key_exists( 'state', $place_meta ) )
-                    continue;
-
-                $states[] = $place_meta['state'];
-            }
-            asort( $states );
-
-            echo json_encode( array_values( array_unique( $states ) ) );
-            die;
-
-            break;
-
-
-        case 'myfossil_resources_list_events_types':
-            $types = array();
-            foreach ( $events as $ev )
-                $types[] = parse_meta( get_post_meta( $ev->ID ) )[ 'type' ];
-            asort( $types );
-
-            echo json_encode( array_values( array_unique( $types ) ) );
-
-            die;
-            break;
-
-        case 'myfossil_resources_list_events_month_years':
-            $month_years = array();
-            foreach ( $events as $ev ) {
-                $meta = parse_meta( get_post_meta( $ev->ID ) );
-                if ( ! array_key_exists( 'starts_at', $meta ) )
-                    continue;
-                $dt = date_parse( $meta['starts_at'] );
-                $key = sprintf( "%04d-%02d", $dt['year'], $dt['month'] );
-                $value = sprintf( "%s, %04d", self::month_name( $dt['month'] ), $dt['year'] );
-
-                $month_years[$key] = $value;
-            }
-            ksort( $month_years );
-            echo json_encode( $month_years );
-
-            die;
-            break;
-
-
-        case 'myfossil_resources_list_types':
-            $types = array();
-            foreach ( $places as $pl ) {
-                if ( property_exists( $pl, 'type' ) ) {
-                    $types[] = $pl->type;
-                }
-            }
-            asort( $types );
-
-            echo json_encode( array_values( array_unique( $types ) ) );
-
-            die;
-            break;
-
-
-        case 'myfossil_resources_list_places':
-            echo json_encode( $places );
-
-            die;
-            break;
 
         case 'myfossil_resources_list_events':
             $ev_array = array();
@@ -308,10 +257,64 @@ class myFOSSIL_Resources_Public
 
             die;
             break;
-        }
-    }
-    // }}}
 
+        case 'myfossil_resources_list_events_states':
+            $states = array();
+            foreach ( $events as $ev ) {
+                $meta = parse_meta( get_post_meta( $ev->ID ) );
+                if ( ! array_key_exists( 'place', $meta ) )
+                    continue;
+
+                // Get Place data
+                $place = get_post_meta( $ev->ID, 'place' );
+                $place_id = $place[0][0]; //only should ever be one
+                $place_meta = parse_meta( get_post_meta( $place_id ) );
+                if ( ! array_key_exists( 'state', $place_meta ) )
+                    continue;
+
+                $states[] = $place_meta['state'];
+            }
+            asort( $states );
+
+            echo json_encode( array_values( array_unique( $states ) ) );
+
+            die;
+            break;
+
+
+        case 'myfossil_resources_list_events_types':
+            $types = array();
+            foreach ( $events as $ev )
+                $types[] = parse_meta( get_post_meta( $ev->ID ) )[ 'type' ];
+            asort( $types );
+
+            echo json_encode( array_values( array_unique( $types ) ) );
+
+            die;
+            break;
+
+
+        case 'myfossil_resources_list_events_month_years':
+            $month_years = array();
+            foreach ( $events as $ev ) {
+                $meta = parse_meta( get_post_meta( $ev->ID ) );
+                if ( ! array_key_exists( 'starts_at', $meta ) )
+                    continue;
+                $dt = date_parse( $meta['starts_at'] );
+                $key = sprintf( "%04d-%02d", $dt['year'], $dt['month'] );
+                $value = sprintf( "%s, %04d", self::month_name( $dt['month'] ), $dt['year'] );
+
+                $month_years[$key] = $value;
+            }
+            ksort( $month_years );
+            echo json_encode( $month_years );
+
+            die;
+            break;
+            */
+            // }}}
+
+    }
 
     // {{{ Enqueues
     /**
@@ -359,4 +362,5 @@ class myFOSSIL_Resources_Public
             array( 'jquery' ), $this->version, false );
     }
     // }}}
+
 }
