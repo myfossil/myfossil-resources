@@ -137,6 +137,30 @@
     }
     // }}}
     
+    function geocode(place) {
+        var address = '';
+        if ( place ) {
+            if ( place.street_address ) address += place.street_address + " ";
+            if ( place.state ) address += place.state + " ";
+            if ( place.city ) address += place.city + " ";
+            if ( place.zip_code ) address += place.zip_code;
+        } 
+
+        return $.ajax({
+            url: 'https://maps.googleapis.com/maps/api/geocode/json',
+            data: { 
+                'address': address
+            },
+            dataType: 'json',
+            success: function( data ) {
+                console.log("Geocode:", place, data);
+            },
+            error: function ( err ) {
+                console.error( err );
+            }
+        });
+    }
+
     // {{{ init_places_map
     function init_places_map() {
         var places = get_places();
@@ -161,10 +185,13 @@
 
         var map = new google.maps.Map( document.getElementById("map-canvas"), mapOptions );
 	
-	var prevInfoWindow;
+        var prevInfoWindow;
+
         // Add a marker for each place on the map.
         places.forEach(
             function( place ) {
+                geocode(place);
+
                 // Create an info pop-up window for the marker.
                 var info = new google.maps.InfoWindow(
                         { content: place.content }
