@@ -1,6 +1,7 @@
 <?php
 
-function myfossil_events_create_button() {
-    ?>
+function myfossil_events_create_button()
+{
+?>
     <?php
 }

@@ -1,7 +1,8 @@
 <?php
 
-function myfossil_places_modal( $place=null ) {
-    ?>
+function myfossil_places_modal( $place=null )
+{
+?>
 
     <!-- Modal -->
     <div class="modal fade" id="placesModal" tabindex="-1" role="dialog" aria-labelledby="placesModalLabel" aria-hidden="true">

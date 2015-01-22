@@ -1,7 +1,8 @@
 <?php
 
-function myfossil_places_template() {
-    ?>
+function myfossil_places_template()
+{
+?>
     <script id="tpl-places" type="text/x-handlebars-template">
     {{#each places}}
         <div class="place place-{{ type }}"

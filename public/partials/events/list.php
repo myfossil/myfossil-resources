@@ -1,7 +1,8 @@
 <?php
 
-function myfossil_events_list() {
-    ?>
+function myfossil_events_list()
+{
+?>
 
     <div id="events-list"></div>
 

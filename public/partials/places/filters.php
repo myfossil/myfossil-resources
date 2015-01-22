@@ -1,7 +1,8 @@
 <?php
 
-function myfossil_places_filter_form() {
-    ?>
+function myfossil_places_filter_form()
+{
+?>
     <form role="form" id="filters">
         <?php wp_nonce_field( 'myfossil_resources_filter', 'myfossil_resources_filter_nonce' ); ?>
 
@@ -17,6 +18,6 @@ function myfossil_places_filter_form() {
     <button type="button" class="btn btn-default" id="clear-filters">
         Reset Filters
     </button>
-    
+
     <?php
 }
