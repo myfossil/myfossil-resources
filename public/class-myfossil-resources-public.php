@@ -78,9 +78,7 @@ class myFOSSIL_Resources_Public
     }
 
     /**
-     * ajax call handler
-     *
-     * @todo abstract state and type listings
+     * AJAX call handlers
      */
     public function ajax_handler()
     {
@@ -97,21 +95,22 @@ class myFOSSIL_Resources_Public
             die;
         }
 
-        $places = \BP_Groups_Group::get(
+
+        /*
+         * Grab BuddyPress Groups, which represent Places now.
+         */
+        $places = array();
+        $groups = \BP_Groups_Group::get(
             array(
                 'populate_extras' => true,
                 'type' => 'alphabetical',
                 'per_page' => -1
             )
         );
-
-        // Massage the data structure to be nicer for JSON
-        $pl = array();
-        foreach ( $places['groups'] as $place ) {
+        foreach ( $groups['groups'] as $place ) {
             if ( ! bp_group_is_visible( $place ) ) {
                 continue;
             }
-
             $p = $place;
             foreach ( groups_get_groupmeta( $place->id, '' ) as $k => $v ) {
                 if ( is_array( $v ) && count( $v ) == 1 ) {
@@ -122,9 +121,9 @@ class myFOSSIL_Resources_Public
             if ( ! property_exists( $p, 'type' ) ) {
                 $p->type = 'other';
             }
-            $pl[] = $p;
+            $places[] = $p;
         }
-        $places = $pl;
+
 
         switch ( $_POST['action'] ) {
             case 'myfossil_resources_list_places':
