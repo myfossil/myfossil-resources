@@ -1,7 +1,8 @@
 <?php
 
-function myfossil_places_list() {
-    ?>
+function myfossil_places_list()
+{
+?>
     <div id="places-list"></div>
     <?php
 }

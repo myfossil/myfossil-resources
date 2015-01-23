@@ -3,7 +3,7 @@
 
     // {{{ get_places 
     function get_places() {
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
         var json = null;
 
         $.ajax({
@@ -11,12 +11,13 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_places',
+                'action': 'myfossil_resources_list_places',
                 'nonce': nonce,
             },
             dataType: 'json',
             success: function( data ) {
                 json = data;
+                console.log("Places:", json);
             },
             error: function ( err ) {
                 console.error( err );
@@ -31,14 +32,14 @@
     function init_places() {
         var tpl_src = $( '#tpl-places' ).html();
         var tpl = Handlebars.compile( tpl_src );
-        $( '#places-list' ).html( tpl( get_places() ) );
+        $( '#places-list' ).html( tpl( { 'places': get_places() } ) );
     }
     // }}}
 
     // {{{ init_places_filters_state
     function init_places_filters_state() {
         var tpl;
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // toggle loading
         $( '#state-filter' ).prop( 'disabled', true );
@@ -48,7 +49,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_states',
+                'action': 'myfossil_resources_list_states',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -66,10 +67,7 @@
             error: function( err ) {
                 console.log( err );
                 $( '#loading-states' ).text( 'Error' );
-            },
-	    failure: function(err) {
-		console.log('failure');
-	    }
+            }
         });
 
         return 1;
@@ -79,7 +77,7 @@
     // {{{ init_places_filters_type
     function init_places_filters_type() {
         var tpl;
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
+        var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
 
         // toggle loading
         $( '#types-selected' ).append( 
@@ -89,7 +87,7 @@
             type: 'post',
             url: ajaxurl,
             data: { 
-                'action': 'myfr_list_types',
+                'action': 'myfossil_resources_list_types',
                 'nonce': nonce,
             },
             dataType: 'json',
@@ -139,9 +137,35 @@
     }
     // }}}
     
+    // {{{ geocode
+    function geocode(place) {
+        var address = '';
+        if ( place ) {
+            if ( place.street_address ) address += place.street_address + " ";
+            if ( place.state ) address += place.state + " ";
+            if ( place.city ) address += place.city + " ";
+            if ( place.zip_code ) address += place.zip_code;
+        } 
+
+        return $.ajax({
+            url: 'https://maps.googleapis.com/maps/api/geocode/json',
+            data: { 
+                'address': address
+            },
+            dataType: 'json',
+            success: function( data ) {
+                console.log("Geocode:", place, data);
+            },
+            error: function ( err ) {
+                console.error( err );
+            }
+        });
+    }
+    // }}}
+
     // {{{ init_places_map
     function init_places_map() {
-        var places = get_places().places;
+        var places = get_places();
 
         var icon_url = "http://maps.google.com/mapfiles/ms/icons/";
         var ch = {
@@ -163,10 +187,13 @@
 
         var map = new google.maps.Map( document.getElementById("map-canvas"), mapOptions );
 	
-	var prevInfoWindow;
+        var prevInfoWindow;
+
         // Add a marker for each place on the map.
         places.forEach(
             function( place ) {
+                // geocode(place);
+
                 // Create an info pop-up window for the marker.
                 var info = new google.maps.InfoWindow(
                         { content: place.content }
@@ -205,49 +232,6 @@
     }
     // }}}
 
-    // {{{ create_place_submit
-    function create_place_submit() {
-        var nonce = $( '#myfr_filter_nonce' ).val(); 
-
-        $('#new-place-form').submit( function( event ) {
-            // Prevent default browser submit behavior on Enter keydown
-            event.preventDefault();
-            event.stopPropagation();
-
-            // Pull Place data from modal
-            var data = {};
-            var data_keys = [ 'name', 'description', 'type', 'country',
-                    'state', 'county', 'city', 'zip', 'address', 'latitude',
-                    'longitude', 'url', 'map_url' ];
-            $.map( data_keys, function( key ) {
-                data[key] = $( 'input#' + key ).val();
-                if ( key === 'type' ) data[key] = $( 'select#type' ).val();
-            });
-
-            // Perform the ajax call 
-            $.ajax({
-                type: 'post',
-                url: ajaxurl,
-                data: { 
-                    'action': 'myfr_create_place',
-                    'nonce': nonce,
-                    'data': data
-                },
-                dataType: 'json',
-                success: function( response ) {
-                    // Added successfully, hide modal
-                    $( '#placesModal' ).modal( 'hide' );
-                    location.reload();
-                },
-                error: function( err ) {
-                    console.info( data );
-                    console.error( err );
-                }
-            });
-        });
-    }
-    // }}}
-
     // {{{ clear_place_filters
     function clear_place_filters() {
         $('#clear-filters').click(function() {
@@ -281,9 +265,6 @@
 
             // Load Google Map with markers
             google.maps.event.addDomListener( window, 'load', init_places_map );
-
-            // Initialize Place creation form behavior
-            create_place_submit();
 
             // Initialize Place filters
             clear_place_filters();

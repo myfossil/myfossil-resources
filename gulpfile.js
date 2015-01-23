@@ -66,5 +66,5 @@ gulp.task('watch', function() {
 
 });
 
-gulp.task('build', ['scripts', 'clean']);
+gulp.task('build', ['scripts']);
 gulp.task('default', ['build', 'watch']);

@@ -15,7 +15,7 @@
         $.ajax({
             type: 'post',
             url: ajaxurl,
-            data: { 'action': 'myfr_load_data' },
+            data: { 'action': 'myfossil_resources_load_data' },
             success: function( resp ) {
                 if ( parseInt( resp ) == 1 ) {
                     $( '#message' ).html( 
