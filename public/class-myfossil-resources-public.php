@@ -108,13 +108,6 @@ class myFOSSIL_Resources_Public
             )
         );
 
-        $events = get_posts(
-                array(
-                    'post_type' => 'event',
-                    'posts_per_page' => -1
-                )
-            );
-
         foreach ( $groups['groups'] as $place ) {
             if ( ! bp_group_is_visible( $place ) ) {
                 continue;
@@ -132,6 +125,23 @@ class myFOSSIL_Resources_Public
             $places[] = $p;
         }
 
+        $event_posts = get_posts(
+                array(
+                    'post_type' => 'event',
+                    'posts_per_page' => -1
+                )
+            );
+
+        $events = array();
+        foreach ( $event_posts as $ep ) {
+            $event = $ep;
+            if ( ! array_key_exists( 'type', $event ) ) {
+                $event->type = 'other';
+            } else {
+                $event->type = strtolower( $event->type );
+            }
+            $events[] = $event;
+        }
 
         switch ( $_POST['action'] ) {
             case 'myfossil_resources_list_places':
@@ -159,7 +169,7 @@ class myFOSSIL_Resources_Public
                 $types = array();
                 foreach ( $places as $pl ) {
                     if ( property_exists( $pl, 'type' ) ) {
-                        $types[] = $pl->type;
+                        $types[] = strtolower( $pl->type );
                     }
                 }
                 asort( $types );
@@ -184,7 +194,12 @@ class myFOSSIL_Resources_Public
                     $dt = date_parse( $fields['starts_at'] );
                     $fields['month_year'] = sprintf( "%04d-%02d", $dt['year'], $dt['month'] );
 
-                    // Get place
+                    if ( array_key_exists( 'type', $fields ) ) {
+                        $fields['type'] = strtolower( $fields['type'] );
+                    } else {
+                        $fields['type'] = 'other';
+                    }
+
                     array_push( $ev_array, $fields );
                 }
 
