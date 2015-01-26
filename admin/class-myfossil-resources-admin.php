@@ -151,9 +151,9 @@ class myFOSSIL_Resources_Admin
                 'title' => 'Event',
                 'fields' => array (
                     array (
-                        'key' => '_location',
-                        'label' => 'Location',
-                        'name' => 'location',
+                        'key' => '_state',
+                        'label' => 'State',
+                        'name' => 'State',
                         'type' => 'text',
                         'formatting' => 'html',
                     ),
