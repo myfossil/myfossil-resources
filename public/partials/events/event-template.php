@@ -2,21 +2,19 @@
 
 function myfossil_events_template()
 {
-?>
-
+    ?>
     <script id="tpl-events" type="text/x-handlebars-template">
     {{#each events}}
-        <div class="event col-xs-12 col-sm-12 col-md-6"
+        <div class="event event-{{ type }}"
                 data-event-state="{{ state }}"
                 data-event-type="{{ type }}"
                 data-event-date="{{ month_year }}">
+            <div class="event-icon">
+                <i class="fa fa-map-marker"></i>
+            </div>
             <div class="event-body">
-                <h5 class="pull-left">{{ title }}</h5>
-                <p class="pull-right">
-                    <i class="fa fa-fw fa-clock-o"></i>
-                    {{ starts_at }} to {{ ends_at }}
-                </p>
-                <div class="clearfix" />
+                <span>{{ type }}</span>
+                <h5>{{ title }}</h5>
                 <p>{{ content }}</p>
             </div>
         </div>

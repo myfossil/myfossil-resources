@@ -338,7 +338,6 @@
 
     $( function() {
         if ( !! $( '#events-list' ).length ) {
-            console.info( 'We think there are Events' );
             // Initialize Events
             init_events();
 
