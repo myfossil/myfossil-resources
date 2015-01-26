@@ -17,7 +17,7 @@
             dataType: 'json',
             success: function( data ) {
                 json = data;
-                console.log("Places:", json);
+                //console.log("Places:", json);
             },
             error: function ( err ) {
                 console.error( err );
@@ -154,7 +154,7 @@
             },
             dataType: 'json',
             success: function( data ) {
-                console.log("Geocode:", place, data);
+                // console.log("Geocode:", place, data);
             },
             error: function ( err ) {
                 console.error( err );
@@ -167,7 +167,7 @@
     function init_places_map() {
         var places = get_places();
 
-        var icon_url = "/static/img/map/";
+        var icon_url = "/wp-content/themes/myfossil/static/img/map/";
         var ch = {
             'other'         : icon_url + 'marker-Other.png',
             'city-park'     : icon_url + 'marker-City-Park.png',
@@ -222,8 +222,8 @@
 				if(prevInfoWindow) 
 				    prevInfoWindow.close();
                                 info.setContent( 
-                                    '<h3>' + place.title + '</h3>' +
-                                    '<p>' + place.content + '</p>' 
+                                    '<h3>' + place.name + '</h3>' +
+                                    '<p>' + place.description + '</p>' 
                                 ),
                                 info.open( map, marker );
 				prevInfoWindow = info;
