@@ -3,6 +3,26 @@
 
     var places_cache;
 
+    var icon_url = "/wp-content/themes/myfossil/static/img/map/";
+    var ch = {
+        'other'           : icon_url + 'marker-Other.png',
+        'city-park'       : icon_url + 'marker-City-Park.png',
+        'fossil-club'     : icon_url + 'marker-Club.png',
+        'collecting-site' : icon_url + 'marker-Collecting-Site.png',
+        'group'           : icon_url + 'marker-Interest-Group.png',
+        'museum'          : icon_url + 'marker-Museum.png',
+        'national-park'   : icon_url + 'marker-National-Park.png',
+        'organization'    : icon_url + 'marker-Organization.png',
+        'society'         : icon_url + 'marker-Society.png',
+        'state-park'      : icon_url + 'marker-State-Park.png'
+    };
+
+    var markers = {};
+    for ( var k in ch ) {
+        markers[k] = [];
+    }
+
+
     // {{{ get_places 
     function get_places() {
         if ( places_cache ) 
@@ -127,6 +147,13 @@
         // Reset, hide all.
         $( 'div.place' ).hide();
 
+        // Hide map markers
+        for ( var k in markers ) {
+            markers[k].forEach( function( m ) {
+                m.setVisible(false);
+            } );
+        }
+
         // Filter by type and state where ( type && state ).
         $( 'input:checkbox:checked' )
             .map( function() { return this.value; } )
@@ -138,6 +165,13 @@
                         tpl += tpl_state.replace( /%state%/, state );
                     tpl += tpl_types.replace( /%type%/, type );
                     $( tpl ).show();
+
+                    // show markers
+                    markers[type].forEach( function( m ) {
+                        if ( state == 'United States' || state == m.state ) {
+                            m.setVisible(true);
+                        }
+                    } );
                 }
             );
     }
@@ -173,20 +207,6 @@
     function init_places_map() {
         var places = get_places();
 
-        var icon_url = "/wp-content/themes/myfossil/static/img/map/";
-        var ch = {
-            'other'           : icon_url + 'marker-Other.png',
-            'city-park'       : icon_url + 'marker-City-Park.png',
-            'fossil-club'     : icon_url + 'marker-Club.png',
-            'collecting-site' : icon_url + 'marker-Collecting-Site.png',
-            'group'           : icon_url + 'marker-Interest-Group.png',
-            'museum'          : icon_url + 'marker-Museum.png',
-            'national-park'   : icon_url + 'marker-National-Park.png',
-            'organization'    : icon_url + 'marker-Organization.png',
-            'society'         : icon_url + 'marker-Society.png',
-            'state-park'      : icon_url + 'marker-State-Park.png'
-        };
-
         var mapOptions = {
                 center: { 
                     lat: 39.50, 
@@ -218,24 +238,31 @@
                             },
                             map: map,
                             title: place.title,
-                            icon: ch[ place.type ],
+                            icon: {
+                                url: ch[ place.type ],
+                            },
+                            state: place.state
                         }
                     );
 
+                // Track this marker for filtering
+                markers[place.type].push( marker );
+
                 // Show additional information when clicked.
                 ( function( marker, place ) {
-                    google.maps.event.addListener( marker, 'click', 
-                            function() {
-				if(prevInfoWindow) 
-				    prevInfoWindow.close();
-                                info.setContent( 
-                                    '<h3>' + place.name + '</h3>' +
-                                    '<p>' + place.description + '</p>' 
-                                ),
-                                info.open( map, marker );
-				prevInfoWindow = info;
-                            }
-                        );
+                    google.maps.event.addListener( marker, 'click', function() {
+                        if( prevInfoWindow ) {
+                            prevInfoWindow.close();
+                        }
+
+                        info.setContent( 
+                            '<h3>' + place.name + '</h3>' +
+                            '<p>' + place.description + '</p>' 
+                        ),
+
+                        info.open( map, marker );
+                        prevInfoWindow = info;
+                    } );
                 } )( marker, place );
             }
         );
