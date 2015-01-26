@@ -175,15 +175,16 @@
 
         var icon_url = "/wp-content/themes/myfossil/static/img/map/";
         var ch = {
-            'other'         : icon_url + 'marker-Other.png',
-            'city-park'     : icon_url + 'marker-City-Park.png',
-            'fossil-club'   : icon_url + 'marker-Club.png',
-            'group'         : icon_url + 'marker-Interest-Group.png',
-            'museum'        : icon_url + 'marker-Museum.png',
-            'national-park' : icon_url + 'marker-National-Park.png',
-            'organization'  : icon_url + 'marker-Organization.png',
-            'society'       : icon_url + 'marker-Society.png',
-            'state-park'    : icon_url + 'marker-State-Park.png'
+            'other'           : icon_url + 'marker-Other.png',
+            'city-park'       : icon_url + 'marker-City-Park.png',
+            'fossil-club'     : icon_url + 'marker-Club.png',
+            'collecting-site' : icon_url + 'marker-Collecting-Site.png',
+            'group'           : icon_url + 'marker-Interest-Group.png',
+            'museum'          : icon_url + 'marker-Museum.png',
+            'national-park'   : icon_url + 'marker-National-Park.png',
+            'organization'    : icon_url + 'marker-Organization.png',
+            'society'         : icon_url + 'marker-Society.png',
+            'state-park'      : icon_url + 'marker-State-Park.png'
         };
 
         var mapOptions = {
