@@ -253,6 +253,52 @@
     }
     // }}}
 
+    function improve_location() {
+        var street_address = $( 'input#street_address' ).val();
+        var city           = $( 'input#city' ).val();
+        var state          = $( 'input#state' ).val();
+        var zip            = $( 'input#zip' ).val();
+        var latitude       = $( 'input#latitude' ).val();
+        var longitude      = $( 'input#longitude' ).val();
+
+        var place = {
+            street_address: street_address,
+            state: state,
+            city: city,
+            zip_code: zip
+        };
+
+        geocode( place )
+            .then( function( data ) {
+                var results = data.results[0];
+                $( 'input#latitude' ).val( results.geometry.location.lat );
+                $( 'input#longitude ' ).val( results.geometry.location.lng );
+                $( 'input#street_address' ).val( results.formatted_address );
+                results.address_components.forEach( function( ac ) {
+                    ac.types.forEach( function( t ) {
+                        switch ( t ) {
+                            case 'locality':
+                                $( 'input#city' ).val( ac.long_name );
+                                break;
+
+                            case 'administrative_area_level_1':
+                                $( 'input#state' ).val( ac.long_name );
+                                break;
+
+                            case 'postal_code':
+                                $( 'input#zip' ).val( ac.long_name );
+                                break;
+
+                            default:
+                                console.log("Address Component:", ac);
+                                break;
+                        }
+                    });
+                });
+
+            });
+    }
+
     $( function() {
         if ( !! $( '#places-list' ).length ) {
             // Initialize Places
@@ -271,6 +317,11 @@
 
             // Initialize Place filters
             clear_place_filters();
+        }
+
+        // Add Geocoding feature to Groups page
+        if ( !! $( '#improve-location' ).length ) {
+            $( '#improve-location' ).click( improve_location );
         }
     } );
 

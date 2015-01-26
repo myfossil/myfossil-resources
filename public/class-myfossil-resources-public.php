@@ -436,6 +436,12 @@ class myFOSSIL_Resources_Public
                 case 'type':
                     $this->_render_type_select( $field );
                     break;
+    
+                case 'contact':
+                    printf( '<button id="improve-location" class="btn btn-default pull-right" type="button">%s</button>', 
+                            '<i class="fa fa-fw fa-magic"></i> Improve Location Data' );
+                    printf( '<br class="clearfix" />' );
+
 
                 default:
                     printf( '<div class="form-group">' );
