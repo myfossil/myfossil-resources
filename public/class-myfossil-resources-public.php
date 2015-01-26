@@ -45,6 +45,28 @@ class myFOSSIL_Resources_Public
     private $version;
 
     /**
+     * Custom fields list, used throughout the plugin to define the fields. 
+     *
+	 * @since    0.0.1
+	 * @access   public
+	 * @var      string    $version    The current version of this plugin.
+     */
+    public $custom_fields; 
+
+    public $group_types = array(
+            'organization'    => "Organization",
+            'group'           => "Interest Group",
+            'society'         => "Society",
+            'fossil-club'     => "Fossil Club",
+            'city-park'       => "City Park",
+            'state-park'      => "State Park",
+            'national-park'   => "National Park",
+            'museum'          => "Museum",
+            'collecting-site' => "Collecting Site",
+            'other'           => "Other"
+        );
+
+    /**
      * Initialize the class and set its properties.
      *
      * @since    0.0.1
@@ -55,9 +77,25 @@ class myFOSSIL_Resources_Public
      */
     public function __construct( $plugin_name, $version )
     {
-
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+
+        $this->custom_fields = array(
+                self::field_factory( 'type', 'Type', true ),
+                self::field_factory( 'street_address', 'Street Address' ),
+                self::field_factory( 'city', 'City', true ),
+                self::field_factory( 'state', 'State', true ),
+                self::field_factory( 'zip', 'Zip Code' ),
+                self::field_factory( 'latitude', 'Latitude' ),
+                self::field_factory( 'longitude', 'Longitude' ),
+                self::field_factory( 'contact', 'Contact Information' ),
+                self::field_factory( 'phone', 'Phone Number' ),
+                self::field_factory( 'email', 'E-mail Address' ),
+                self::field_factory( 'url', 'Website URL' ),
+                self::field_factory( 'facebook', 'Facebook' ),
+                self::field_factory( 'twitter', 'Twitter' ),
+                self::field_factory( 'blog_url', 'Blog URL' )
+            );
 
     }
 
@@ -362,6 +400,112 @@ class myFOSSIL_Resources_Public
         wp_enqueue_script( 'googlemaps',
             '//maps.googleapis.com/maps/api/js?sensor=false',
             array( 'jquery' ), $this->version, false );
+    }
+    // }}}
+
+    // {{{ Group enhancements
+    /**
+     * BuddyPress Group meta field utility class factory. 
+     *
+     * @author  Brandon Wood <btwood@geometeor.com>
+     * @since   0.4.0
+     * @static
+     * @param   string  $id                 Meta field key
+     * @param   string  $desc               Meta field description (used in labels)
+     * @param   bool    $show   (optional)  Whether to show in the header, default false.
+     * @return  stdClass
+     */
+    public static function field_factory( $id, $desc, $show=false ) {
+        $f = new \stdClass;
+        $f->id = $id;
+        $f->description = $desc;
+        $f->show = (bool) $show;
+        return $f;
+    }
+
+    /**
+     * Output form to edit custom meta group fields.
+     *
+     * @author  Brandon Wood <btwood@geometeor.com>
+     * @since   0.4.0
+     */
+    public function group_header_fields_markup()
+    {
+        foreach ( $this->custom_fields as $field ) {
+            switch ( $field->id ) {
+                case 'type':
+                    $this->_render_type_select( $field );
+                    break;
+    
+                case 'contact':
+                    printf( '<button id="improve-location" class="btn btn-default pull-right" type="button">%s</button>', 
+                            '<i class="fa fa-fw fa-magic"></i> Improve Location Data' );
+                    printf( '<br class="clearfix" />' );
+
+
+                default:
+                    printf( '<div class="form-group">' );
+                    printf( '<label class="control-label" for="%s">%s</label>',
+                            $field->id, $field->description );
+                    printf( '<input class="form-control" id="%s" type="text" name="%s"
+                            value="%s" placeholder="%s" />', $field->id, $field->id,
+                            groups_get_groupmeta( bp_get_group_id(), $field->id ),
+                            $field->description );
+                    printf( '</div>' );
+                    break;
+            }
+        }
+    }
+
+    public function _render_type_select($field) {
+        ?>
+        <div class="form-group">
+            <label class="control-label" for="<?=$field->id ?>">
+                <?=$field->description ?>
+            </label>
+            <select class="form-control" id="<?=$field->id ?>" name="<?=$field->id ?>">
+            <?php foreach ( $this->group_types as $key => $value ) : ?>
+                <option value="<?=$key ?>"<?=( groups_get_groupmeta( bp_get_group_id(), $field->id ) == $key ) ? " selected=\"selected\"" : null ?>><?=$value ?></option>
+            <?php endforeach; ?>
+            </select>
+        </div>
+        <?php
+    }
+
+    /**
+     * Save custom group meta data.
+     *
+     * @author  Brandon Wood <btwood@geometeor.com>
+     * @since   0.4.0
+     * @param   int     $group_id
+     */
+    public function group_header_fields_save( $group_id )
+    {
+        foreach ( $this->custom_fields as $field )
+            if ( isset( $_POST[$field->id] ) )
+                groups_update_groupmeta( $group_id, $field->id, $_POST[$field->id] );
+    }
+
+
+    /**
+     * Custom group header.
+     *
+     * @author  Brandon Wood <btwood@geometeor.com>
+     * @since   0.4.0
+     * @param   int     $group_id
+     */
+    public function output_header() {
+        $d = array(
+                'Members' => groups_get_total_member_count( bp_get_group_id() ),
+                'City' => groups_get_groupmeta( bp_get_group_id(), 'city' ),
+                'State' => groups_get_groupmeta( bp_get_group_id(), 'state' )
+            );
+
+        printf ( '<dl class="inline">' );
+        foreach ( $d as $dt => $dd )
+            if ( $dd )
+                printf( "<dt>%s</dt>\n<dd>%s</dd>\n\n", $dt, $dd );
+        printf ( '</dl>' );
     }
     // }}}
 

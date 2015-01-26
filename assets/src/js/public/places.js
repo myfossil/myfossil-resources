@@ -1,8 +1,33 @@
 ( function( $ ) {
     'use strict';
 
+    var places_cache;
+
+    var icon_url = "/wp-content/themes/myfossil/static/img/map/";
+    var ch = {
+        'other'           : icon_url + 'marker-Other.png',
+        'city-park'       : icon_url + 'marker-City-Park.png',
+        'fossil-club'     : icon_url + 'marker-Club.png',
+        'collecting-site' : icon_url + 'marker-Collecting-Site.png',
+        'group'           : icon_url + 'marker-Interest-Group.png',
+        'museum'          : icon_url + 'marker-Museum.png',
+        'national-park'   : icon_url + 'marker-National-Park.png',
+        'organization'    : icon_url + 'marker-Organization.png',
+        'society'         : icon_url + 'marker-Society.png',
+        'state-park'      : icon_url + 'marker-State-Park.png'
+    };
+
+    var markers = {};
+    for ( var k in ch ) {
+        markers[k] = [];
+    }
+
+
     // {{{ get_places 
     function get_places() {
+        if ( places_cache ) 
+            return places_cache;
+
         var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
         var json = null;
 
@@ -17,13 +42,14 @@
             dataType: 'json',
             success: function( data ) {
                 json = data;
-                console.log("Places:", json);
+                //console.log("Places:", json);
             },
             error: function ( err ) {
                 console.error( err );
             }
         });
 
+        places_cache = json;
         return json;
     }
     // }}}
@@ -121,6 +147,13 @@
         // Reset, hide all.
         $( 'div.place' ).hide();
 
+        // Hide map markers
+        for ( var k in markers ) {
+            markers[k].forEach( function( m ) {
+                m.setVisible(false);
+            } );
+        }
+
         // Filter by type and state where ( type && state ).
         $( 'input:checkbox:checked' )
             .map( function() { return this.value; } )
@@ -132,6 +165,13 @@
                         tpl += tpl_state.replace( /%state%/, state );
                     tpl += tpl_types.replace( /%type%/, type );
                     $( tpl ).show();
+
+                    // show markers
+                    markers[type].forEach( function( m ) {
+                        if ( state == 'United States' || state == m.state ) {
+                            m.setVisible(true);
+                        }
+                    } );
                 }
             );
     }
@@ -154,7 +194,7 @@
             },
             dataType: 'json',
             success: function( data ) {
-                console.log("Geocode:", place, data);
+                // console.log("Geocode:", place, data);
             },
             error: function ( err ) {
                 console.error( err );
@@ -166,16 +206,6 @@
     // {{{ init_places_map
     function init_places_map() {
         var places = get_places();
-
-        var icon_url = "http://maps.google.com/mapfiles/ms/icons/";
-        var ch = {
-                "City Park"       : icon_url + "red-dot.png",
-                "State Park"      : icon_url + "blue-dot.png",
-                "National Park"   : icon_url + "green-dot.png",
-                "Collecting Site" : icon_url + "orange-dot.png",
-                "Museum"          : icon_url + "purple-dot.png",
-                "Other"           : icon_url + "yellow-dot.png",
-            };
 
         var mapOptions = {
                 center: { 
@@ -208,24 +238,31 @@
                             },
                             map: map,
                             title: place.title,
-                            icon: ch[ place.type ],
+                            icon: {
+                                url: ch[ place.type ],
+                            },
+                            state: place.state
                         }
                     );
 
+                // Track this marker for filtering
+                markers[place.type].push( marker );
+
                 // Show additional information when clicked.
                 ( function( marker, place ) {
-                    google.maps.event.addListener( marker, 'click', 
-                            function() {
-				if(prevInfoWindow) 
-				    prevInfoWindow.close();
-                                info.setContent( 
-                                    '<h3>' + place.title + '</h3>' +
-                                    '<p>' + place.content + '</p>' 
-                                ),
-                                info.open( map, marker );
-				prevInfoWindow = info;
-                            }
-                        );
+                    google.maps.event.addListener( marker, 'click', function() {
+                        if( prevInfoWindow ) {
+                            prevInfoWindow.close();
+                        }
+
+                        info.setContent( 
+                            '<h3>' + place.name + '</h3>' +
+                            '<p>' + place.description + '</p>' 
+                        ),
+
+                        info.open( map, marker );
+                        prevInfoWindow = info;
+                    } );
                 } )( marker, place );
             }
         );
@@ -250,6 +287,52 @@
     }
     // }}}
 
+    function improve_location() {
+        var street_address = $( 'input#street_address' ).val();
+        var city           = $( 'input#city' ).val();
+        var state          = $( 'input#state' ).val();
+        var zip            = $( 'input#zip' ).val();
+        var latitude       = $( 'input#latitude' ).val();
+        var longitude      = $( 'input#longitude' ).val();
+
+        var place = {
+            street_address: street_address,
+            state: state,
+            city: city,
+            zip_code: zip
+        };
+
+        geocode( place )
+            .then( function( data ) {
+                var results = data.results[0];
+                $( 'input#latitude' ).val( results.geometry.location.lat );
+                $( 'input#longitude ' ).val( results.geometry.location.lng );
+                $( 'input#street_address' ).val( results.formatted_address );
+                results.address_components.forEach( function( ac ) {
+                    ac.types.forEach( function( t ) {
+                        switch ( t ) {
+                            case 'locality':
+                                $( 'input#city' ).val( ac.long_name );
+                                break;
+
+                            case 'administrative_area_level_1':
+                                $( 'input#state' ).val( ac.long_name );
+                                break;
+
+                            case 'postal_code':
+                                $( 'input#zip' ).val( ac.long_name );
+                                break;
+
+                            default:
+                                // console.log("Address Component:", ac);
+                                break;
+                        }
+                    });
+                });
+
+            });
+    }
+
     $( function() {
         if ( !! $( '#places-list' ).length ) {
             // Initialize Places
@@ -268,6 +351,11 @@
 
             // Initialize Place filters
             clear_place_filters();
+        }
+
+        // Add Geocoding feature to Groups page
+        if ( !! $( '#improve-location' ).length ) {
+            $( '#improve-location' ).click( improve_location );
         }
     } );
 

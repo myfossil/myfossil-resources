@@ -352,7 +352,7 @@
             $( '#types-selected' ).on( 'click', 'input[type=checkbox]', filter_events );
 
             // Load up Google Map with markers
-            google.maps.event.addDomListener(window, 'load', init_events_map);
+            // google.maps.event.addDomListener(window, 'load', init_events_map);
        
             // Reset filters
             clear_event_filters();
