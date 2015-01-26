@@ -76,7 +76,6 @@ class myFOSSIL_Resources_Admin
         return plugin_dir_url( realpath( __FILE__ ) ) . 'includes/acf/';
     }
 
-
     /**
      * Configure directory to Advanced Custom Fields in the plugin.
      *
@@ -84,15 +83,6 @@ class myFOSSIL_Resources_Admin
      */
     public function acf_settings_dir( $dir ) {
         return $this->acf_settings_path( $dir );
-    }
-
-    /**
-     * Enable or disable showing the ACF menu in the admin panel.
-     *
-     * @since 0.4.0
-     */
-    public function acf_show_admin( $show ) {
-        return false;
     }
 
     // {{{ Events configuration methods
@@ -148,7 +138,77 @@ class myFOSSIL_Resources_Admin
         // }}}
 
         // Tell WordPress.
-        return register_post_type( 'event', $args );
+        register_post_type( 'event', $args );
+        self::register_events_acf();
+    }
+
+    public static function register_events_acf() {
+        // {{{ ACF export
+        if(function_exists("register_field_group"))
+        {
+            register_field_group(array (
+                'id' => 'acf_event',
+                'title' => 'Event',
+                'fields' => array (
+                    array (
+                        'key' => '_location',
+                        'label' => 'Location',
+                        'name' => 'location',
+                        'type' => 'text',
+                        'formatting' => 'html',
+                    ),
+                    array (
+                        'key' => '_latitude',
+                        'label' => 'Latitude',
+                        'name' => 'latitude',
+                        'type' => 'number',
+                    ),
+                    array (
+                        'key' => '_longitude',
+                        'label' => 'Longitude',
+                        'name' => 'longitude',
+                        'type' => 'number',
+                    ),
+                    array (
+                        'key' => '_starts_at',
+                        'label' => 'Starts at...',
+                        'name' => 'starts_at',
+                        'type' => 'text',
+                        'instructions' => 'YYYY-MM-DD HH:mm:ss',
+                        'placeholder' => '2015-04-22 14:00:00',
+                        'formatting' => 'html',
+                    ),
+                    array (
+                        'key' => '_ends_at',
+                        'label' => 'Ends at...',
+                        'name' => 'ends_at',
+                        'type' => 'text',
+                        'instructions' => 'YYYY-MM-DD HH:mm:ss',
+                        'placeholder' => '2015-04-22 14:00:00',
+                        'formatting' => 'html',
+                    ),
+                ),
+                'location' => array (
+                    array (
+                        array (
+                            'param' => 'post_type',
+                            'operator' => '==',
+                            'value' => 'event',
+                            'order_no' => 0,
+                            'group_no' => 0,
+                        ),
+                    ),
+                ),
+                'options' => array (
+                    'position' => 'normal',
+                    'layout' => 'no_box',
+                    'hide_on_screen' => array (
+                    ),
+                ),
+                'menu_order' => 0,
+            ));
+        }
+        // }}}
     }
 
 

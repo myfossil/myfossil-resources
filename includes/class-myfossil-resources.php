@@ -1,6 +1,8 @@
 <?php
 namespace myFOSSIL\Plugin\Resources;
 
+require_once 'acf/acf.php';
+
 /**
  * The file that defines the core plugin class
  *
@@ -180,7 +182,8 @@ class myFOSSIL_Resources
         /* Advanced Custom Fields */
 		$this->loader->add_filter( 'acf/settings/path', $plugin_admin, 'acf_settings_path' );
 		$this->loader->add_filter( 'acf/settings/dir', $plugin_admin, 'acf_settings_dir' );
-		$this->loader->add_filter( 'acf/settings/show_admin', $plugin_admin, 'acf_show_admin' );
+        define( 'ACF_LITE' , true );
+        add_filter('acf/settings/show_admin', '__return_false');
     }
 
     /**
