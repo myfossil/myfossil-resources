@@ -167,15 +167,18 @@
     function init_places_map() {
         var places = get_places();
 
-        var icon_url = "http://maps.google.com/mapfiles/ms/icons/";
+        var icon_url = "/static/img/map/";
         var ch = {
-                "City Park"       : icon_url + "red-dot.png",
-                "State Park"      : icon_url + "blue-dot.png",
-                "National Park"   : icon_url + "green-dot.png",
-                "Collecting Site" : icon_url + "orange-dot.png",
-                "Museum"          : icon_url + "purple-dot.png",
-                "Other"           : icon_url + "yellow-dot.png",
-            };
+            'other'         : icon_url + 'marker-Other.png',
+            'city-park'     : icon_url + 'marker-City-Park.png',
+            'fossil-club'   : icon_url + 'marker-Club.png',
+            'group'         : icon_url + 'marker-Interest-Group.png',
+            'museum'        : icon_url + 'marker-Museum.png',
+            'national-park' : icon_url + 'marker-National-Park.png',
+            'organization'  : icon_url + 'marker-Organization.png',
+            'society'       : icon_url + 'marker-Society.png',
+            'state-park'    : icon_url + 'marker-State-Park.png'
+        };
 
         var mapOptions = {
                 center: { 

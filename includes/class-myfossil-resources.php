@@ -245,6 +245,19 @@ class myFOSSIL_Resources
         $this->loader->add_action(
                 'wp_ajax_nopriv_myfossil_resources_list_events_month_years', $plugin_public,
                 'ajax_handler' );
+
+        // BuddyPress Groups fields
+        $this->loader->add_action( 'groups_custom_group_fields_editable',
+                $plugin_public, 'group_header_fields_markup' );
+
+        $this->loader->add_action( 'groups_group_details_edited',
+                $plugin_public, 'group_header_fields_save' );
+
+        $this->loader->add_action( 'groups_created_group', $plugin_public,
+                'group_header_fields_save' );
+
+        $this->loader->add_action( 'bp_group_header_meta', $plugin_public,
+                'output_header' );
     }
 
     /**
