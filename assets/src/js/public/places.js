@@ -1,8 +1,13 @@
 ( function( $ ) {
     'use strict';
 
+    var places_cache;
+
     // {{{ get_places 
     function get_places() {
+        if ( places_cache ) 
+            return places_cache;
+
         var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
         var json = null;
 
@@ -24,6 +29,7 @@
             }
         });
 
+        places_cache = json;
         return json;
     }
     // }}}
@@ -290,7 +296,7 @@
                                 break;
 
                             default:
-                                console.log("Address Component:", ac);
+                                // console.log("Address Component:", ac);
                                 break;
                         }
                     });
