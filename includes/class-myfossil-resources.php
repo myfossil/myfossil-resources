@@ -176,6 +176,11 @@ class myFOSSIL_Resources
         /* AJAX */
         $this->loader->add_action( 'wp_ajax_myfossil_resources_load_data', $plugin_admin,
                 'ajax_handler' );
+
+        /* Advanced Custom Fields */
+		$this->loader->add_filter( 'acf/settings/path', $plugin_admin, 'acf_settings_path' );
+		$this->loader->add_filter( 'acf/settings/dir', $plugin_admin, 'acf_settings_dir' );
+		$this->loader->add_filter( 'acf/settings/show_admin', $plugin_admin, 'acf_show_admin' );
     }
 
     /**

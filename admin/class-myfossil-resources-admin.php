@@ -67,6 +67,34 @@ class myFOSSIL_Resources_Admin
                 'myFOSSIL\Plugin\Resources\Admin\admin_settings_page' );
     }
 
+    /**
+     * Configure path to Advanced Custom Fields in the plugin.
+     *
+     * @since 0.4.0
+     */
+    public function acf_settings_path( $path ) {
+        return plugin_dir_url( realpath( __FILE__ ) ) . 'includes/acf/';
+    }
+
+
+    /**
+     * Configure directory to Advanced Custom Fields in the plugin.
+     *
+     * @since 0.4.0
+     */
+    public function acf_settings_dir( $dir ) {
+        return $this->acf_settings_path( $dir );
+    }
+
+    /**
+     * Enable or disable showing the ACF menu in the admin panel.
+     *
+     * @since 0.4.0
+     */
+    public function acf_show_admin( $show ) {
+        return false;
+    }
+
     // {{{ Events configuration methods
     /**
      * Create the custom post type Event.
