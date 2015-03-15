@@ -16,7 +16,7 @@ namespace myFOSSIL\Plugin\Resources;
  * Plugin Name:       myFOSSIL Resources
  * Plugin URI:        https://github.com/myfossil/myfossil-resources
  * Description:       Adds Places and Events to WordPress.
- * Version:           0.3.1
+ * Version:           0.4.0
  * Author:            myFOSSIL
  * Author URI:        https://github.com/myfossil/
  * License:           BSD
