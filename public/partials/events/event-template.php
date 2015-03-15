@@ -6,7 +6,7 @@ function myfossil_events_template()
     <script id="tpl-events" type="text/x-handlebars-template">
     {{#each events}}
         <div class="event event-{{ type }}"
-                data-event-state="{{ state }}"
+                data-event-state="{{ State }}"
                 data-event-type="{{ type }}"
                 data-event-date="{{ month_year }}">
             <div class="event-icon">

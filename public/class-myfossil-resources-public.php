@@ -303,17 +303,10 @@ class myFOSSIL_Resources_Public
                 $states = array();
                 foreach ( $events as $ev ) {
                     $meta = parse_meta( get_post_meta( $ev->ID ) );
-                    if ( ! array_key_exists( 'place', $meta ) )
+                    if ( ! array_key_exists( 'State', $meta ) )
                         continue;
 
-                    // Get Place data
-                    $place = get_post_meta( $ev->ID, 'place' );
-                    $place_id = $place[0][0]; //only should ever be one
-                    $place_meta = parse_meta( get_post_meta( $place_id ) );
-                    if ( ! array_key_exists( 'state', $place_meta ) )
-                        continue;
-
-                    $states[] = $place_meta['state'];
+                    $states[] = $meta['State'];
                 }
                 asort( $states );
 

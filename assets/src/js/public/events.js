@@ -131,7 +131,7 @@
                         tpl += tpl_state.replace( /%state%/, state );
                     if ( dt !== 'All time' )
                         tpl += tpl_dates.replace( /%date%/, dt );
-                    tpl += tpl_types.replace( /%type%/, type );
+                    tpl += tpl_types.replace( /%type%/, type.toLowerCase() );
                     console.log( tpl );
                     $( tpl ).show();
                 }
@@ -157,6 +157,7 @@
             },
             dataType: 'json',
             success: function( states ) {
+                console.info("States:", states);
                 $( '#state' ).append( '<option>United States</option>' );
                 states.forEach( function( state ) {
                     tpl = '<option value="' + state + '">' + state + '</option>';
@@ -166,7 +167,7 @@
                 $( '#loading-states' ).remove();
             },
             error: function( err ) {
-                console.log( err );
+                console.error( err );
                 $( '#loading-states' ).text( 'Error' );
             }
         });
