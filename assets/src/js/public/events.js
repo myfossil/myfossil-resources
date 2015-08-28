@@ -1,10 +1,12 @@
 ( function( $ ) {
     'use strict';
 
+
     // {{{ get_events
     function get_events() {
         var nonce = $( '#myfossil_resources_filter_nonce' ).val(); 
         var json = null;
+
 
         $.ajax({
             async: false,
@@ -245,7 +247,7 @@
             },
             error: function( err ) {
                 console.log( err );
-                $( '#loading-types' ).text( '<i class="fa fa-fw fa-warning"></i> Error' );
+                $( '#loading-types' ).html( '<i class="fa fa-fw fa-warning"></i> Error' );
             }
         });
 
